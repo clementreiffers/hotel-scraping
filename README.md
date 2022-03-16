@@ -18,8 +18,11 @@ Scraping de données de divers hotels sur Paris avec analyse et prédictions des
 Nom
 Adresse
 Prix
+nombre etoiles
+nombre personne par chambre
 
 # Données traitées en IA
+
 
 Prix
 Adresse
@@ -40,4 +43,11 @@ Recherche des diffétes données et l'affichage sur une carte.
 Analyse des données et prédiction du prix d'un hotel en fonction de son emplacement.
 
 ## Séparation des tâches
+
+## sites à scraper
+    hotel.com : maelle
+    trivago hotel : quentin
+    booking : clement
+    kayak : adrien
+
 
