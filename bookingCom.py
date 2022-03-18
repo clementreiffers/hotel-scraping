@@ -17,7 +17,7 @@ def getHotels():
     hostelsLinks = list(map(lambda hotel: hotel.get_attribute("href"), hostelList))
 
     grades = list(map(lambda grade: grade.text,
-                      driver.find_elements(by="class name", value="_9c5f726ff bd528f9ea6")))
+                      driver.find_elements(by="class name", value="_4310f7077 _45807dae0 _ab99fb427 _f7538b398")))
 
     print(grades)
 
