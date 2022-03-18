@@ -10,7 +10,7 @@ def searchCity(city):
     driver.find_element(by="class name", value="sb-searchbox__button ").click()
 
 def setDate(date):
-    ...
+    driver.find_element(by="xpath", value="//button[contains(@class, 'fbbd3bd1be _798b9b8a2')]").click()
 
 def getHotels():
     time.sleep(2)
@@ -28,4 +28,4 @@ if __name__ == '__main__':
         "https://www.booking.com/index.fr.html?label=gen173nr-1BCAEoggI46AdIM1gEaE2IAQGYAQ24ARfIAQzYAQHoAQGIAgGoAgO4Arf4yJEGwAIB0gIkNmMwYWYwNGUtNGY3Ni00ZTk3LThjOGUtZWQ0OTEwMDZkZGMw2AIF4AIB;sid=4870985d274b91999c83d2a5d6f77393;keep_landing=1&sb_price_type=total&")
 
     searchCity("Paris")
-    getHotels()
+    setDate("5")
