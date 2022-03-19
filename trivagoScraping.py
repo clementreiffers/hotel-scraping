@@ -55,22 +55,17 @@ def selectDate(dateChoosen):
         dateChoosen = datetime.date(int(dateChoosen[0]), int(dateChoosen[1]), int(dateChoosen[2]))
         dateCalendar = driver.find_element(by="xpath", value="//button[contains(@class, 'cursor-auto font-bold')]") \
             .text.split(' ')
-        # dateCalendar = datetime.date(int(dateCalendar[0]), int(dateCalendar[1]), 1)
         month = dateCalendar[0]
         year = dateCalendar[1]
         while month not in dateChoosen and year not in dateChoosen:
-            # Go to next page
-
-# pageDate = driver.find_element(by="xpath",value="//div[@data-testid='calendar-popover']/")
-# if pageDate < currentYear:
-#     exit('Selected date is behind the current date')
-# else:
-#     while pageDate < currentYear:
-# Press next button
-
-# time.sleep(2)
-# driver.find_element(by="xpath", value="//time[@datetime='" + checkOutDate + "']") \
-#     .find_element(by="xpath", value="..").click()
+            driver.find_element(by="xpath", value="//button[@data-testid='calendar-button-next']").click()
+            dateCalendar = driver.find_element(by="xpath", value="//button[contains(@class, 'cursor-auto font-bold')]") \
+                .text.split(' ')
+            month = dateCalendar[0]
+            year = dateCalendar[1]
+        driver.find_element(by="xpath", value="//time[@datetime='" + dateChoosen + "']") \
+            .find_element(by="xpath", value="..") \
+            .click()
 
 
 def selectGhests(adultsNumber, childrenNumber, roomsNumber):
@@ -101,7 +96,7 @@ if __name__ == '__main__':
     selectHoteltab()
     writeCity("Paris")
     selectDate('2022-03-19')
-    selectDate('2022-03-20')
-    # selectGhests(5, 4, 5)
-    # copyHotelsDataFromResearch()
+    selectDate('2022-07-20')
+    selectGhests(5, 4, 5)
+    copyHotelsDataFromResearch()
     # driver.close()
