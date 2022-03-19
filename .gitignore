@@ -1,2 +1,2 @@
-.idea
-geckodriver.log
+**/*.log
+**/.idea
