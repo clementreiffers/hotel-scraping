@@ -1,5 +1,6 @@
-from selenium import webdriver
 import time
+
+from selenium import webdriver
 
 monthCorrespondances = {
     "01": "janvier",
@@ -44,25 +45,28 @@ def setDate(date):
     :param date: dd/MM/yyyy
     """
     day, month, year = separateDate(date)
+    requestedDate = " ".join((day, month, year))
+
     # valeur de la fleche pour choisir les dates mais pas utile pour le moment car
     # c'est affiche par default
     # driver.find_elements(by="xpath", value="//div[contains(@class, 'bk-icon -streamline-arrow_nav_down sb-date-field__icon-arrow-down')]")
 
-    isGoodMonthShows = True
-
-    while isGoodMonthShows:
-        time.sleep(4)
+    # permet de scroller quand on n'a pas le bon mois affiché
+    isGoodMonthShows = False
+    while not isGoodMonthShows:
+        time.sleep(5)
         xpathCalendar = "//div[contains(@aria-live, 'polite')]"
         currentDate = getByXpath(xpathCalendar).text
 
         if month in currentDate and year in currentDate:
-            isGoodMonthShows = False
+            isGoodMonthShows = True
         else:
-            getByXpath("//button[contains(@class, 'd40f3b0d6d f5ea4b08ab')]").click()
-        print(currentDate)
-
-    # xpath = "//td[text() = '" + day + "']"
-    # print(driver.find_element(by="xpath", value=xpath).text)
+            try:
+                getByXpath("//button[contains(@class, 'd40f3b0d6d f5ea4b08ab')]").click()
+            except:
+                getByXpath("//svg[contains(@width, '24') and contains(@viewBox, '0 0 24 24')]").click()
+        # xpathDay = "//td[contains(@role, 'checkbox') and contains(@aria-label, '{}')]".format(requestedDate)
+        # getByXpath(xpathDay).click()
 
 
 def getHotels():
