@@ -45,23 +45,17 @@ def acceptCookies():
     driver.find_element(by="id", value="onetrust-accept-btn-handler").click()
 
 
-def setDate(date):
-    """
-    :param date: dd/MM/yyyy
-    """
-    day, month, year = separateDate(date)
-    requestedDate = " ".join((day, month, year))
-
-    # valeur de la fleche pour choisir les dates mais pas utile pour le moment car
-    # c'est affiche par default
-    # driver.find_elements(by="xpath", value="//div[contains(@class, 'bk-icon -streamline-arrow_nav_down sb-date-field__icon-arrow-down')]")
-
-    # permet de scroller quand on n'a pas le bon mois affiché
+def setGoodMonthYear(month, year):
     isGoodMonthShows = False
     while not isGoodMonthShows:
-        time.sleep(5)
+        time.sleep(2)
         xpathCalendar = "//div[contains(@aria-live, 'polite')]"
         currentDate = getByXpath(xpathCalendar).text
+        if len(currentDate) == 0:
+            currentDate = driver.find_element(by="xpath", value="//*[contains(@class, 'bui-calendar__wrapper')]")
+            currentDate = currentDate.text.split(" ")[0:2]
+            currentDate[1] = str(''.join(i for i in currentDate[1] if i.isdigit()))
+            print("je suis passe ici")
 
         print("month '{}', year '{}', current date '{}'".format(month, year, currentDate))
 
@@ -74,7 +68,22 @@ def setDate(date):
                 print("j'ai eu un pb je suis passe par la div")
                 getByXpath(
                     "//*[local-name()='div' and contains(@class, 'bui-calendar__control bui-calendar__control--next')]").click()
-                print(driver.find_element(by="css selector", value="bui-calendar__wrapper").text)
+
+
+def setDate(date):
+    """
+    :param date: dd/MM/yyyy
+    """
+    day, month, year = separateDate(date)
+    requestedDate = " ".join((day, month, year))
+
+    setGoodMonthYear(month, year)
+
+    # valeur de la fleche pour choisir les dates mais pas utile pour le moment car
+    # c'est affiche par default
+    # driver.find_elements(by="xpath", value="//div[contains(@class, 'bk-icon -streamline-arrow_nav_down sb-date-field__icon-arrow-down')]")
+
+    # permet de scroller quand on n'a pas le bon mois affiché
     xpathDay = "//span[contains(@aria-hidden, 'true') and contains(text(), '19')]"
     # xpathDay = "//p[contains(@id, 'onetrust-policy-text')]"
     getByXpath(xpathDay).click()
