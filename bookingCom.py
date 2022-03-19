@@ -40,6 +40,11 @@ def getByXpath(xpath):
                                value=xpath)
 
 
+def acceptCookies():
+    time.sleep(2)
+    driver.find_element(by="id", value="onetrust-accept-btn-handler").click()
+
+
 def setDate(date):
     """
     :param date: dd/MM/yyyy
@@ -58,15 +63,21 @@ def setDate(date):
         xpathCalendar = "//div[contains(@aria-live, 'polite')]"
         currentDate = getByXpath(xpathCalendar).text
 
+        print("month '{}', year '{}', current date '{}'".format(month, year, currentDate))
+
         if month in currentDate and year in currentDate:
             isGoodMonthShows = True
         else:
             try:
                 getByXpath("//button[contains(@class, 'd40f3b0d6d f5ea4b08ab')]").click()
             except:
-                getByXpath("//svg[contains(@width, '24') and contains(@viewBox, '0 0 24 24')]").click()
-        # xpathDay = "//td[contains(@role, 'checkbox') and contains(@aria-label, '{}')]".format(requestedDate)
-        # getByXpath(xpathDay).click()
+                print("j'ai eu un pb je suis passe par la div")
+                getByXpath(
+                    "//*[local-name()='div' and contains(@class, 'bui-calendar__control bui-calendar__control--next')]").click()
+                print(driver.find_element(by="css selector", value="bui-calendar__wrapper").text)
+    xpathDay = "//span[contains(@aria-hidden, 'true') and contains(text(), '19')]"
+    # xpathDay = "//p[contains(@id, 'onetrust-policy-text')]"
+    getByXpath(xpathDay).click()
 
 
 def getHotels():
@@ -82,5 +93,6 @@ if __name__ == '__main__':
     driver.get(
         "https://www.booking.com/index.fr.html?label=gen173nr-1BCAEoggI46AdIM1gEaE2IAQGYAQ24ARfIAQzYAQHoAQGIAgGoAgO4Arf4yJEGwAIB0gIkNmMwYWYwNGUtNGY3Ni00ZTk3LThjOGUtZWQ0OTEwMDZkZGMw2AIF4AIB;sid=4870985d274b91999c83d2a5d6f77393;keep_landing=1&sb_price_type=total&")
 
+    acceptCookies()
     searchCity("Paris")
     setDate("20/05/2022")
