@@ -7,20 +7,19 @@ Created on Sat Mar  19 11:37:12 2022
 @author: QuentinM
 """
 
-# Dictionnary
-monthCorrespondances = {
-    "01": "January",
-    "02": "February",
-    "03": "March",
-    "04": "April",
-    "05": "May",
-    "06": "June",
-    "07": "July",
-    "08": "August",
-    "09": "September",
-    "10": "October",
-    "11": "November",
-    "12": "December",
+monthDictionnary = {
+    "January": "01",
+    "February": "02",
+    "March": "03",
+    "April": "04",
+    "May": "05",
+    "June": "06",
+    "July": "07",
+    "August": "08",
+    "September": "09",
+    "October": "10",
+    "November": "11",
+    "December": "12",
 }
 
 from selenium import webdriver
@@ -44,46 +43,27 @@ def writeCity(city):
     driver.find_element(by="id", value="react-autowhatever-1--item-0").click()
 
 
-def selectDate(dateChoosen):
+def selectDate(dateChosen):
     time.sleep(2)
-    # Go to previous page in the calendar
-    # driver.find_element(by="xpath", value="//button[@data-testid='calendar-button-prev']").click()
     try:
-        driver.find_element(by="xpath", value="//time[@datetime='" + dateChoosen + "']") \
+        driver.find_element(by="xpath", value="//time[@datetime='" + dateChosen + "']") \
             .find_element(by="xpath", value="..") \
             .click()
     except:
-        # currentDate = datetime.date.today()
-        # if (dateChoosen < currentDate):
-        #     print("Date is before the current day")
-        #     exit(1)
-        # else:
-        # print("Date is working")
-        dateChoosen = dateChoosen.split('-')
-        dateChoosen = datetime.date(int(dateChoosen[0]), int(dateChoosen[1]), int(dateChoosen[2]))
-
+        dateChosenArr = dateChosen.split('-')
         dateCalendar = driver.find_element(by="xpath", value="//button[contains(@class, 'cursor-auto font-bold')]") \
             .text.split(' ')
-        # dateCalendar = datetime.date(int(dateCalendar[0]), int(dateCalendar[1]), 1)
-        month = dateCalendar[0]
-        year = dateCalendar[1]
-        while month not in dateChoosen and year not in dateChoosen:
-        # print(dateCalendar.strftime("%Y-%M"))
-        # while dateCalendar != dateChoosen.:
-        #     if month in currentDate and year in currentDate:
-        #         isGoodMonthShows = True
+        while dateCalendar[1] != dateChosenArr[1] and dateCalendar[1] != dateChosenArr[1]:
+            time.sleep(2)
+            driver.find_element(by="xpath", value="//button[@data-testid='calendar-button-next']").click()
+            dateCalendar = driver.find_element(by="xpath", value="//button[contains(@class, 'cursor-auto font-bold')]") \
+                .text.split(' ')
+            dateCalendar = [dateCalendar[1], monthDictionnary[dateCalendar[0]]]
 
-
-# pageDate = driver.find_element(by="xpath",value="//div[@data-testid='calendar-popover']/")
-# if pageDate < currentYear:
-#     exit('Selected date is behind the current date')
-# else:
-#     while pageDate < currentYear:
-# Press next button
-
-# time.sleep(2)
-# driver.find_element(by="xpath", value="//time[@datetime='" + checkOutDate + "']") \
-#     .find_element(by="xpath", value="..").click()
+        time.sleep(2)
+        driver.find_element(by="xpath", value="//time[@datetime='" + dateChosen + "']") \
+            .find_element(by="xpath", value="..") \
+            .click()
 
 
 def selectGhests(adultsNumber, childrenNumber, roomsNumber):
@@ -113,8 +93,8 @@ if __name__ == '__main__':
     driver.get("https://www.trivago.com")
     selectHoteltab()
     writeCity("Paris")
-    selectDate('2022-03-19')
-    selectDate('2022-03-20')
-    # selectGhests(5, 4, 5)
-    # copyHotelsDataFromResearch()
-    # driver.close()
+    selectDate('2022-07-19')
+    selectDate('2022-07-20')
+    selectGhests(5, 4, 5)
+    copyHotelsDataFromResearch()
+    driver.close()
