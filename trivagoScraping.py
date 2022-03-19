@@ -44,34 +44,24 @@ def writeCity(city):
 
 
 def selectDate(dateChosen):
-    dateTest = dateChosen
     time.sleep(2)
     try:
         driver.find_element(by="xpath", value="//time[@datetime='" + dateChosen + "']") \
             .find_element(by="xpath", value="..") \
             .click()
     except:
-        dateChosen = dateChosen.split('-')  # Y-M-D
+        dateChosenArr = dateChosen.split('-')
         dateCalendar = driver.find_element(by="xpath", value="//button[contains(@class, 'cursor-auto font-bold')]") \
-            .text.split(' ')  # M-Y
-        print(dateCalendar)  # ['March', '2022']
-        print(dateChosen)  # ['2022', '07', '20']
-
-        dateCalendar = [dateCalendar[1], monthDictionnary[dateCalendar[0]]]
-        print(dateCalendar)  # ['2022', '03]
-        print(dateChosen)  # ['2022', '07', '20']
-
-        while dateCalendar[1] != dateChosen[1] and dateCalendar[1] != dateChosen[1]:
+            .text.split(' ')
+        while dateCalendar[1] != dateChosenArr[1] and dateCalendar[1] != dateChosenArr[1]:
             time.sleep(2)
             driver.find_element(by="xpath", value="//button[@data-testid='calendar-button-next']").click()
             dateCalendar = driver.find_element(by="xpath", value="//button[contains(@class, 'cursor-auto font-bold')]") \
                 .text.split(' ')
             dateCalendar = [dateCalendar[1], monthDictionnary[dateCalendar[0]]]
-            print(dateCalendar)
-            print(dateChosen)
 
         time.sleep(2)
-        driver.find_element(by="xpath", value="//time[@datetime='" + dateTest + "']") \
+        driver.find_element(by="xpath", value="//time[@datetime='" + dateChosen + "']") \
             .find_element(by="xpath", value="..") \
             .click()
 
