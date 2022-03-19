@@ -46,6 +46,7 @@ def acceptCookies():
 
 
 def setGoodMonthYear(month, year):
+    # we can choose the correct month but we need the calendar open
     isGoodMonthShows = False
     while not isGoodMonthShows:
         time.sleep(2)
@@ -70,23 +71,36 @@ def setGoodMonthYear(month, year):
                     "//*[local-name()='div' and contains(@class, 'bui-calendar__control bui-calendar__control--next')]").click()
 
 
-def setDate(date):
-    """
-    :param date: dd/MM/yyyy
-    """
-    day, month, year = separateDate(date)
-    requestedDate = " ".join((day, month, year))
+def showCalendar():
+    try:
+        driver.find_element(by="xpath", value="//div[contains(@class, 'sb-date-field__display')]").click()
+    except:
+        print("je suis passe par ici")
+        driver.find_element(by="xpath", value="//button[contains(@data-testid, 'date-display-field-end')]").click()
 
-    setGoodMonthYear(month, year)
 
-    # valeur de la fleche pour choisir les dates mais pas utile pour le moment car
-    # c'est affiche par default
-    # driver.find_elements(by="xpath", value="//div[contains(@class, 'bk-icon -streamline-arrow_nav_down sb-date-field__icon-arrow-down')]")
-
+def selectDay(day):
     # permet de scroller quand on n'a pas le bon mois affiché
     xpathDay = "//span[contains(@aria-hidden, 'true') and contains(text(), '{}')]".format(day)
-    # xpathDay = "//p[contains(@id, 'onetrust-policy-text')]"
     getByXpath(xpathDay).click()
+
+
+def setDate(startDate, endDate):
+    """
+    :param arrivalDate: dd/MM/yyyy
+    """
+    startDay, startMonth, startYear = separateDate(startDate)
+    endDay, endMonth, endYear = separateDate(endDate)
+
+    setGoodMonthYear(startMonth, startYear)
+
+    selectDay(startDay)
+
+    showCalendar()
+
+    setGoodMonthYear(endMonth, endYear)
+
+    selectDay(endDay)
 
 
 def getHotels():
@@ -104,4 +118,4 @@ if __name__ == '__main__':
 
     acceptCookies()
     searchCity("Paris")
-    setDate("20/05/2022")
+    setDate("20/05/2022", "23/06/2022")
