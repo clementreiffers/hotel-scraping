@@ -56,9 +56,6 @@ def setGoodMonthYear(month, year):
             currentDate = driver.find_element(by="xpath", value="//*[contains(@class, 'bui-calendar__wrapper')]")
             currentDate = currentDate.text.split(" ")[0:2]
             currentDate[1] = str(''.join(i for i in currentDate[1] if i.isdigit()))
-            print("je suis passe ici")
-
-        print("month '{}', year '{}', current date '{}'".format(month, year, currentDate))
 
         if month in currentDate and year in currentDate:
             isGoodMonthShows = True
@@ -66,7 +63,6 @@ def setGoodMonthYear(month, year):
             try:
                 getByXpath("//button[contains(@class, 'd40f3b0d6d f5ea4b08ab')]").click()
             except:
-                print("j'ai eu un pb je suis passe par la div")
                 getByXpath(
                     "//*[local-name()='div' and contains(@class, 'bui-calendar__control bui-calendar__control--next')]").click()
 
@@ -108,7 +104,19 @@ def getHotels():
     hostelList = driver.find_elements(by="class name", value="fb01724e5b")
     hostelsNames = list(map(lambda hotel: hotel.text.split("\n")[0], hostelList))
     hostelsLinks = list(map(lambda hotel: hotel.get_attribute("href"), hostelList))
-    grades = list(map(lambda grade: grade.text, getByXpath("//div[contains(@class, '_9c5f726ff bd528f9ea6')]")))
+    grades = list(map(lambda grade: grade.text + "/10",
+                      driver.find_elements(by="xpath", value="//div[contains(@class, '_9c5f726ff bd528f9ea6')]")))
+    prices = list(map(lambda price: price.text.split(" ")[1],
+                      driver.find_elements(by="xpath", value="//span[contains(@class, 'fde444d7ef _e885fdc12')]")))
+    print(grades)
+    print(prices)
+
+
+def applyFamilyAndDate():
+    try:
+        driver.find_element(by="xpath", value="//button[contains(@class, 'sb-searchbox__button')]").click()
+    except:
+        driver.find_element(by="xpath", value="//button[contains(@type, 'submit')]").click()
 
 
 if __name__ == '__main__':
@@ -119,3 +127,6 @@ if __name__ == '__main__':
     acceptCookies()
     searchCity("Paris")
     setDate("20/05/2022", "23/06/2022")
+    applyFamilyAndDate()
+
+    getHotels()
