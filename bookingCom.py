@@ -84,7 +84,7 @@ def setDate(date):
     # driver.find_elements(by="xpath", value="//div[contains(@class, 'bk-icon -streamline-arrow_nav_down sb-date-field__icon-arrow-down')]")
 
     # permet de scroller quand on n'a pas le bon mois affiché
-    xpathDay = "//span[contains(@aria-hidden, 'true') and contains(text(), '19')]"
+    xpathDay = "//span[contains(@aria-hidden, 'true') and contains(text(), '{}')]".format(day)
     # xpathDay = "//p[contains(@id, 'onetrust-policy-text')]"
     getByXpath(xpathDay).click()
 
