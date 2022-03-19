@@ -46,33 +46,20 @@ def writeCity(city):
 
 def selectDate(dateChoosen):
     time.sleep(2)
-    # Go to previous page in the calendar
-    # driver.find_element(by="xpath", value="//button[@data-testid='calendar-button-prev']").click()
     try:
         driver.find_element(by="xpath", value="//time[@datetime='" + dateChoosen + "']") \
             .find_element(by="xpath", value="..") \
             .click()
     except:
-        # currentDate = datetime.date.today()
-        # if (dateChoosen < currentDate):
-        #     print("Date is before the current day")
-        #     exit(1)
-        # else:
-        # print("Date is working")
         dateChoosen = dateChoosen.split('-')
         dateChoosen = datetime.date(int(dateChoosen[0]), int(dateChoosen[1]), int(dateChoosen[2]))
-
         dateCalendar = driver.find_element(by="xpath", value="//button[contains(@class, 'cursor-auto font-bold')]") \
             .text.split(' ')
         # dateCalendar = datetime.date(int(dateCalendar[0]), int(dateCalendar[1]), 1)
         month = dateCalendar[0]
         year = dateCalendar[1]
         while month not in dateChoosen and year not in dateChoosen:
-        # print(dateCalendar.strftime("%Y-%M"))
-        # while dateCalendar != dateChoosen.:
-        #     if month in currentDate and year in currentDate:
-        #         isGoodMonthShows = True
-
+            # Go to next page
 
 # pageDate = driver.find_element(by="xpath",value="//div[@data-testid='calendar-popover']/")
 # if pageDate < currentYear:
