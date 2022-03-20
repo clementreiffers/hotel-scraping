@@ -84,39 +84,48 @@ def selectGhests(adultsNumber, childrenNumber, roomsNumber):
     driver.find_element(by="xpath", value="//button[@data-testid='search-button']").click()
 
 
-def nextResearchHotelPage():
-    driver.find_element(by="xpath", value="//button[@data-testid='next-result-page']").click()
-
-
-def copyHotelsDataFromResearch(names, grades, prices, localisations, links, index):
+def getHotels(names, grades, prices, links, index):
     name = names[index].text
-    print(name)
-    # grade =
-    # price =
-    # localisation =
+    grade = grades[index].get_attribute("content")
+    price = prices[index].text
+    localisations = driver.find_elements(by="xpath", value="//p[@itemprop='price']")
+    localisation = localisations[index].text
     # link =
-    # return [name, grade, price, localisation, link]
-    return [name, "Grade", "Price", "Localisations", "Links"]
+    print(name + ", " + grade + ", " + price + ", " + localisation)
+    return [name, grade, price, localisation, "Links"]
+
+
+# def clickAddressButton(addressesButtons, index):
+#     addressesButtons[index].click()
+#     hotelPolicyButtons = driver.find_elements(by="xpath", value="button[@data-testid='hotel-policies-show-more']")
+#     hotelPolicyButtons[index].click()
 
 
 def copyHotelsToCsvLoop(fileName):
+    time.sleep(2)
+    driver.find_element(by="xpath", value="//label[@data-title='Hotel']").click()
     cf.createCsv(["name", "grade", "price", "localisation", "link"], fileName)
-    nexPageButtonPresent = True
-    while nexPageButtonPresent:
-        time.sleep(10)
+    nextPageButtonPresent = True
+    while nextPageButtonPresent:
+        time.sleep(8)
         hotelsList = driver.find_elements(by="xpath", value="//li[@data-testid='accommodation-list-element']")
         names = driver.find_elements(by="xpath", value="//button[@data-testid='item-name']")
+        grades = driver.find_elements(by="xpath", value="//meta[@itemprop='ratingValue']")
+        prices = driver.find_elements(by="xpath", value="//p[@itemprop='price']")
+        # addressesLocationButton = driver.find_elements(by="xpath",
+        #                                                value="//button[@data-testid='distance-label-section']")
         index = 0
         for hotel in hotelsList:
             time.sleep(2)
-            copyHotelsDataFromResearch(names, "f", "f", "f", "f", index)
+            # clickAddressButton(addressesLocationButton, index)
+            getHotels(names, grades, prices, "f", index)
             # cf.appendToCsv(copyHotelsDataFromResearch(names, "f", "f", "f", "f", index), fileName)
             index += 1
         try:
-            nextResearchHotelPage()
+            driver.find_element(by="xpath", value="//button[@data-testid='next-result-page']").click()
         except:
             print("No more page to get hotels from")
-            nexPageButtonPresent = False
+            nextPageButtonPresent = False
 
 
 if __name__ == '__main__':
