@@ -22,7 +22,8 @@ def addRows(infos, file, isHead=False):
     if isHead:
         csv.writer(file).writerow(infos)
     else:
-        csv.writer(file).writerow([infos[i][j] for j in range(len(infos[0])) for i in range(len(infos))])
+        for j in range(len(infos[0])):
+            csv.writer(file).writerow([infos[i][j] for i in range(len(infos))])
     file.close()
 
 
@@ -51,8 +52,7 @@ def getLocalisationFromAdd(add):
     :param add: "address_hotel"
     :return:
     """
-    geolocator = Nominatim(user_agent="main")
-    location = geolocator.geocode(add)
+    location = Nominatim(user_agent="main").geocode(add)
     return [location.latitude, location.longitude]
 
 
