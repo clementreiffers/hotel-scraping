@@ -22,12 +22,7 @@ def addRows(infos, file, isHead=False):
     if isHead:
         csv.writer(file).writerow(infos)
     else:
-        for j in range(len(infos[0]) - 1):
-            rowCsv = []
-            for i in range(len(infos)):
-                rowCsv.append(infos[i][j])
-                print(i, j)
-            csv.writer(file).writerow(rowCsv)
+        csv.writer(file).writerow([infos[i][j] for j in range(len(infos[0])) for i in range(len(infos))])
     file.close()
 
 

@@ -104,18 +104,20 @@ def changePage():
 
 
 if __name__ == '__main__':
-    driver = webdriver.Firefox()
-    driver.get(
-        "https://www.booking.com/index.fr.html?label=gen173nr-1BCAEoggI46AdIM1gEaE2IAQGYAQ24ARfIAQzYAQHoAQGIAgGoAgO4Arf4yJEGwAIB0gIkNmMwYWYwNGUtNGY3Ni00ZTk3LThjOGUtZWQ0OTEwMDZkZGMw2AIF4AIB;sid=4870985d274b91999c83d2a5d6f77393;keep_landing=1&sb_price_type=total&")
-
-    acceptCookies()
-    searchCity("Paris")
-    setDate("20/05/2022", "23/05/2022")
-    applyFamilyAndDate()
-
+    # driver = webdriver.Firefox()
+    # driver.get(
+    #     "https://www.booking.com/index.fr.html?label=gen173nr-1BCAEoggI46AdIM1gEaE2IAQGYAQ24ARfIAQzYAQHoAQGIAgGoAgO4Arf4yJEGwAIB0gIkNmMwYWYwNGUtNGY3Ni00ZTk3LThjOGUtZWQ0OTEwMDZkZGMw2AIF4AIB;sid=4870985d274b91999c83d2a5d6f77393;keep_landing=1&sb_price_type=total&")
+    #
+    # acceptCookies()
+    # searchCity("Paris")
+    # setDate("20/05/2022", "23/05/2022")
+    # applyFamilyAndDate()
+    #
+    # cf.createCsv(["name", "grade", "price", "localisation", "link"], 'bookingCom.csv')
+    #
+    # while True:
+    #     cf.appendToCsv(getHotels(), "bookingCom.csv")
+    #
+    #     changePage()
     cf.createCsv(["name", "grade", "price", "localisation", "link"], 'bookingCom.csv')
-
-    while True:
-        cf.appendToCsv(getHotels(), "bookingCom.csv")
-
-        changePage()
+    cf.appendToCsv([["reiffers"], ["clement"], ["5"], ["5"], ["5"]], "bookingCom.csv")
