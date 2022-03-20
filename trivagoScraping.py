@@ -90,10 +90,11 @@ def copyHotelsToCsvLoop(fileName):
     cf.createCsv(["name", "grade", "price", "localisation", "link"], fileName)
     nextPageButtonPresent = True
     while nextPageButtonPresent:
-        cf.appendToCsv(getHotels(), "bookingCom.csv")
+        cf.appendToCsv(getHotels(), fileName)
+        print("Hotels data have been written")
         try:
             driver.find_element(by="xpath", value="//button[@data-testid='next-result-page']").click()
-            print("No more hoteles to scan, changing page.")
+            print("No more hotels to scan, changing page.")
         except:
             print("No more pages to get hotels' data from.")
             nextPageButtonPresent = False
@@ -113,12 +114,12 @@ def getHotels():
 def clickAllLocalisationButtons():
     addressesButtons = driver.find_elements(by="xpath", value="//button[@data-testid='distance-label-section']")
     for addressButton in addressesButtons:
-        time.sleep(1)
+        time.sleep(0.5)
         addressButton.click()
     showHotelsPoliciesButtons = driver.find_elements(by="xpath",
                                                      value="//button[@data-testid='hotel-policies-show-more']")
     for showHotelPoliciesButton in showHotelsPoliciesButtons:
-        time.sleep(1)
+        time.sleep(0.5)
         showHotelPoliciesButton.click()
 
 
@@ -157,5 +158,5 @@ if __name__ == '__main__':
     selectDate('2022-04-20')
     selectDate('2022-04-21')
     selectGhests(5, 4, 5)
-    copyHotelsToCsvLoop('trivagoScraping.csv')
+    copyHotelsToCsvLoop("trivagoScraping.csv")
     driver.close()
