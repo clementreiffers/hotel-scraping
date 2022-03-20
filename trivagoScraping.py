@@ -100,16 +100,18 @@ def copyHotelsDataFromResearch(names, grades, prices, localisations, links, inde
 
 
 def copyHotelsToCsvLoop(fileName):
-    time.sleep(2)
     cf.createCsv(["name", "grade", "price", "localisation", "link"], fileName)
     nexPageButtonPresent = True
     while nexPageButtonPresent:
-        hotelsList = driver.find_elements(by="xpath", value="//li[@data-testid='accommodation-list-element']")
         time.sleep(10)
+        hotelsList = driver.find_elements(by="xpath", value="//li[@data-testid='accommodation-list-element']")
+        names = driver.find_elements(by="xpath", value="//button[@data-testid='item-name']")
+        index = 0
         for hotel in hotelsList:
             time.sleep(2)
-            copyHotelsDataFromResearch(hotel)
-            # cf.appendToCsv(copyHotelsDataFromResearch(hotel), fileName)
+            copyHotelsDataFromResearch(names, "f", "f", "f", "f", index)
+            # cf.appendToCsv(copyHotelsDataFromResearch(names, "f", "f", "f", "f", index), fileName)
+            index += 1
         try:
             nextResearchHotelPage()
         except:
@@ -120,23 +122,11 @@ def copyHotelsToCsvLoop(fileName):
 if __name__ == '__main__':
     driver = webdriver.Firefox()
     driver.maximize_window()
-    # driver.get("https://www.trivago.com")
-
-    driver.get("https://www.trivago.com/en-US/lm/hotels-paris-france?search=200-22235;dr-20220419-20220420")
-    time.sleep(10)
-    hotelsList = driver.find_elements(by="xpath", value="//li[@data-testid='accommodation-list-element']")
-    names = driver.find_elements(by="xpath", value="//button[@data-testid='item-name']")
-    index = 0
-    for hotel in hotelsList:
-        time.sleep(2)
-        copyHotelsDataFromResearch(names, "f", "f", "f", "f", index)
-        index += 1
-        # cf.appendToCsv(copyHotelsDataFromResearch(hotel), fileName)
-
-    # selectHoteltab()
-    # writeCity("Paris")
-    # selectDate('2022-04-19')
-    # selectDate('2022-04-20')
-    # selectGhests(5, 4, 5)
-    # copyHotelsToCsvLoop('trivagoScraping.csv')
+    driver.get("https://www.trivago.com")
+    selectHoteltab()
+    writeCity("Paris")
+    selectDate('2022-04-19')
+    selectDate('2022-04-20')
+    selectGhests(5, 4, 5)
+    copyHotelsToCsvLoop('trivagoScraping.csv')
     driver.close()
