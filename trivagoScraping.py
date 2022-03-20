@@ -7,6 +7,12 @@ Created on Sat Mar  19 11:37:12 2022
 @author: QuentinM
 """
 
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import datetime
+import time
+import commonFunctions as cf
+
 monthDictionnary = {
     "January": "01",
     "February": "02",
@@ -21,11 +27,6 @@ monthDictionnary = {
     "November": "11",
     "December": "12",
 }
-
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-import datetime
-import time
 
 
 def selectHoteltab():
@@ -83,8 +84,68 @@ def selectGhests(adultsNumber, childrenNumber, roomsNumber):
     driver.find_element(by="xpath", value="//button[@data-testid='search-button']").click()
 
 
-def copyHotelsDataFromResearch():
-    print("")
+def copyHotelsToCsvLoop(fileName):
+    time.sleep(2)
+    driver.find_element(by="xpath", value="//label[@data-title='Hotel']").click()
+    cf.createCsv(["name", "grade", "price", "localisation", "link"], fileName)
+    nextPageButtonPresent = True
+    while nextPageButtonPresent:
+        cf.appendToCsv(getHotels(), "bookingCom.csv")
+        try:
+            driver.find_element(by="xpath", value="//button[@data-testid='next-result-page']").click()
+            print("No more hoteles to scan, changing page.")
+        except:
+            print("No more pages to get hotels' data from.")
+            nextPageButtonPresent = False
+
+
+def getHotels():
+    time.sleep(4)
+    clickAllLocalisationButtons()
+    names = getHotelsName()
+    grades = getHotelsGrade()
+    prices = getHotelsPrice()
+    locations = getHotelsLocation()
+    links = getHotelsLink()
+    return [names, grades, prices, locations, links]
+
+
+def clickAllLocalisationButtons():
+    addressesButtons = driver.find_elements(by="xpath", value="//button[@data-testid='distance-label-section']")
+    for addressButton in addressesButtons:
+        time.sleep(1)
+        addressButton.click()
+    showHotelsPoliciesButtons = driver.find_elements(by="xpath",
+                                                     value="//button[@data-testid='hotel-policies-show-more']")
+    for showHotelPoliciesButton in showHotelsPoliciesButtons:
+        time.sleep(1)
+        showHotelPoliciesButton.click()
+
+
+def getHotelsName():
+    return list(
+        map(lambda name: name.text, driver.find_elements(by="xpath", value="//button[@data-testid='item-name']")))
+
+
+def getHotelsGrade():
+    return list(
+        map(lambda grade: grade.text, driver.find_elements(by="xpath", value="//span[@itemprop='ratingValue']")))
+
+
+def getHotelsPrice():
+    return list(
+        map(lambda price: price.text, driver.find_elements(by="xpath", value="//p[@itemprop='price']")))
+
+
+def getHotelsLocation():
+    return list(
+        map(lambda localisation: localisation.text,
+            driver.find_elements(by="xpath", value="//span[@itemprop='streetAddress']")))
+
+
+def getHotelsLink():
+    return list(
+        map(lambda link: link.get_attribute("href"), driver.find_elements(by="xpath", value="//a[@itemprop='url']")))
 
 
 if __name__ == '__main__':
@@ -93,8 +154,8 @@ if __name__ == '__main__':
     driver.get("https://www.trivago.com")
     selectHoteltab()
     writeCity("Paris")
-    selectDate('2022-07-19')
-    selectDate('2022-07-20')
+    selectDate('2022-04-19')
+    selectDate('2022-04-20')
     selectGhests(5, 4, 5)
-    copyHotelsDataFromResearch()
+    copyHotelsToCsvLoop('trivagoScraping.csv')
     driver.close()
