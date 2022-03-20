@@ -1,21 +1,7 @@
 import time
-
+import csv
 from selenium import webdriver
-
-monthCorrespondances = {
-    "01": "janvier",
-    "02": "fevrier",
-    "03": "mars",
-    "04": "avril",
-    "05": "mai",
-    "06": "juin",
-    "07": "juillet",
-    "08": "aout",
-    "09": "septembre",
-    "10": "octobre",
-    "11": "novembre",
-    "12": "decembre",
-}
+import commonFunctions as cf
 
 
 def searchCity(city):
@@ -24,15 +10,6 @@ def searchCity(city):
 
     time.sleep(2)
     driver.find_element(by="class name", value="sb-searchbox__button ").click()
-
-
-def separateDate(date):
-    """
-    :param date: dd/MM/yyyy
-    """
-    day, month, year = date.split("/")
-    month = monthCorrespondances[month]
-    return day, month, year
 
 
 def getByXpath(xpath):
@@ -85,8 +62,8 @@ def setDate(startDate, endDate):
     """
     :param arrivalDate: dd/MM/yyyy
     """
-    startDay, startMonth, startYear = separateDate(startDate)
-    endDay, endMonth, endYear = separateDate(endDate)
+    startDay, startMonth, startYear = cf.separateDate(startDate)
+    endDay, endMonth, endYear = cf.separateDate(endDate)
 
     setGoodMonthYear(startMonth, startYear)
 
@@ -102,14 +79,16 @@ def setDate(startDate, endDate):
 def getHotels():
     time.sleep(2)
     hostelList = driver.find_elements(by="class name", value="fb01724e5b")
-    hostelsNames = list(map(lambda hotel: hotel.text.split("\n")[0], hostelList))
-    hostelsLinks = list(map(lambda hotel: hotel.get_attribute("href"), hostelList))
+    names = list(map(lambda hotel: hotel.text.split("\n")[0], hostelList))
+    links = list(map(lambda hotel: hotel.get_attribute("href"), hostelList))
     grades = list(map(lambda grade: grade.text + "/10",
                       driver.find_elements(by="xpath", value="//div[contains(@class, '_9c5f726ff bd528f9ea6')]")))
     prices = list(map(lambda price: price.text.split(" ")[1],
                       driver.find_elements(by="xpath", value="//span[contains(@class, 'fde444d7ef _e885fdc12')]")))
-    print(grades)
-    print(prices)
+    localisations = list(map(lambda address: cf.getLocalisationFromAdd(address.text),
+                             driver.find_elements(by="xpath", value="//span[contains(@data-testid, 'address')]")))
+
+    return [names, grades, prices, localisations, links]
 
 
 def applyFamilyAndDate():
@@ -119,6 +98,11 @@ def applyFamilyAndDate():
         driver.find_element(by="xpath", value="//button[contains(@type, 'submit')]").click()
 
 
+def changePage():
+    time.sleep(2)
+    driver.find_element(by="xpath", value="//button[contains(@aria-label, 'Page suivante')]").click()
+
+
 if __name__ == '__main__':
     driver = webdriver.Firefox()
     driver.get(
@@ -126,7 +110,12 @@ if __name__ == '__main__':
 
     acceptCookies()
     searchCity("Paris")
-    setDate("20/05/2022", "23/06/2022")
+    setDate("20/05/2022", "23/05/2022")
     applyFamilyAndDate()
 
-    getHotels()
+    cf.createCsv(["name", "grade", "price", "localisation", "link"], 'bookingCom.csv')
+
+    while True:
+        cf.appendToCsv(getHotels(), "bookingCom.csv")
+
+        changePage()
