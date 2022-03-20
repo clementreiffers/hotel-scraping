@@ -119,3 +119,5 @@ if __name__ == '__main__':
         cf.appendToCsv(getHotels(), "bookingCom.csv")
 
         changePage()
+    # cf.createCsv(["name", "grade", "price", "localisation", "link"], 'bookingCom.csv')
+    # cf.appendToCsv([["test", "test2"], ["test", "test2"], ["test", "test2"], ["test", "test2"], ["test", "test2"]], "bookingCom.csv")
