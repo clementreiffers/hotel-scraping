@@ -7,6 +7,12 @@ Created on Sat Mar  19 11:37:12 2022
 @author: QuentinM
 """
 
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import datetime
+import time
+import commonFunctions as cf
+
 monthDictionnary = {
     "January": "01",
     "February": "02",
@@ -21,11 +27,6 @@ monthDictionnary = {
     "November": "11",
     "December": "12",
 }
-
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-import datetime
-import time
 
 
 def selectHoteltab():
@@ -83,8 +84,31 @@ def selectGhests(adultsNumber, childrenNumber, roomsNumber):
     driver.find_element(by="xpath", value="//button[@data-testid='search-button']").click()
 
 
-def copyHotelsDataFromResearch():
-    print("")
+def nextResearchHotelPage():
+    driver.find_element(by="xpath", value="//button[@data-testid='next-result-page']").click()
+
+
+def copyHotelsDataFromResearch(hotel):
+    # return [names, grades, prices, localisations, links]
+    return ["Name", "Grade", "Prices", "Localisations", "Links"]
+    # print("Get hotel data")
+
+
+def copyHotelsToCsvLoop(fileName):
+    time.sleep(2)
+    cf.createCsv(["name", "grade", "price", "localisation", "link"], fileName)
+    nexPageButtonPresent = True
+    while nexPageButtonPresent:
+        hotelsList = driver.find_elements(by="xpath", value="//li[@data-testid='accommodation-list-element']")
+        time.sleep(10)
+        for hotel in hotelsList:
+            time.sleep(2)
+            cf.appendToCsv(copyHotelsDataFromResearch(hotel), fileName)
+        try:
+            nextResearchHotelPage()
+        except:
+            print("No more page to get hotels from")
+            nexPageButtonPresent = False
 
 
 if __name__ == '__main__':
@@ -93,8 +117,8 @@ if __name__ == '__main__':
     driver.get("https://www.trivago.com")
     selectHoteltab()
     writeCity("Paris")
-    selectDate('2022-07-19')
-    selectDate('2022-07-20')
+    selectDate('2022-04-19')
+    selectDate('2022-04-20')
     selectGhests(5, 4, 5)
-    copyHotelsDataFromResearch()
-    # driver.close()
+    copyHotelsToCsvLoop('trivagoScraping.csv')
+    driver.close()
