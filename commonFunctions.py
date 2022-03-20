@@ -1,6 +1,7 @@
 import csv
 from geopy.geocoders import Nominatim
 
+# maybe create an english for certain cases
 monthCorrespondances = {
     "01": "janvier",
     "02": "fevrier",
@@ -31,16 +32,30 @@ def addRows(infos, file, isHead=False):
 
 
 def createCsv(infos, file):
+    """
+    :param infos: send the head of the csv ex : ["name", "grade", "price", "localisation", "link"]
+    :param file: the name of the file you want to create ex: "test.csv"
+    :return:
+    """
     f = open(file, 'w')
     addRows(infos, f, True)
 
 
 def appendToCsv(infos, file):
+    """
+    :param infos: [[allNames], [allGrade],[allPrices], [allLocalisations], [allLinks]]
+    :param file: name of the csv ex : "file.csv"
+    :return:
+    """
     f = open(file, "a")
     addRows(infos, f)
 
 
 def getLocalisationFromAdd(add):
+    """
+    :param add: "address_hotel"
+    :return:
+    """
     geolocator = Nominatim(user_agent="main")
     location = geolocator.geocode(add)
     return [location.latitude, location.longitude]
