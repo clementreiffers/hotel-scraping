@@ -97,4 +97,4 @@ if __name__ == '__main__':
     selectDate('2022-07-20')
     selectGhests(5, 4, 5)
     copyHotelsDataFromResearch()
-    driver.close()
+    # driver.close()
