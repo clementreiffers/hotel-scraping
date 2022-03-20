@@ -1,5 +1,5 @@
 import time
-
+import csv
 from selenium import webdriver
 
 monthCorrespondances = {
@@ -102,14 +102,14 @@ def setDate(startDate, endDate):
 def getHotels():
     time.sleep(2)
     hostelList = driver.find_elements(by="class name", value="fb01724e5b")
-    hostelsNames = list(map(lambda hotel: hotel.text.split("\n")[0], hostelList))
-    hostelsLinks = list(map(lambda hotel: hotel.get_attribute("href"), hostelList))
+    names = list(map(lambda hotel: hotel.text.split("\n")[0], hostelList))
+    links = list(map(lambda hotel: hotel.get_attribute("href"), hostelList))
     grades = list(map(lambda grade: grade.text + "/10",
                       driver.find_elements(by="xpath", value="//div[contains(@class, '_9c5f726ff bd528f9ea6')]")))
     prices = list(map(lambda price: price.text.split(" ")[1],
                       driver.find_elements(by="xpath", value="//span[contains(@class, 'fde444d7ef _e885fdc12')]")))
-    print(grades)
-    print(prices)
+
+    return names, grades, prices, links
 
 
 def applyFamilyAndDate():
@@ -119,6 +119,18 @@ def applyFamilyAndDate():
         driver.find_element(by="xpath", value="//button[contains(@type, 'submit')]").click()
 
 
+def changePage():
+    time.sleep(2)
+    driver.find_element(by="xpath", value="//button[contains(@aria-label, 'Page suivante')]").click()
+
+
+def appendToCsv(names, grades, prices, links, file):
+    file = open(file, "a")
+    for i in range(len(names) - 1):
+        csv.writer(file).writerow([names[i], grades[i], prices[i], links[i]])
+    file.close()
+
+
 if __name__ == '__main__':
     driver = webdriver.Firefox()
     driver.get(
@@ -126,7 +138,17 @@ if __name__ == '__main__':
 
     acceptCookies()
     searchCity("Paris")
-    setDate("20/05/2022", "23/06/2022")
+    setDate("20/05/2022", "23/05/2022")
     applyFamilyAndDate()
 
-    getHotels()
+    f = open('bookingCom.csv', 'w')
+    headCsv = ["name", "grade", "price", "link"]
+    writer = csv.writer(f)
+    writer.writerow(headCsv)
+    f.close()
+
+    while True:
+        names, grades, prices, links = getHotels()
+        appendToCsv(names, grades, prices, links, "bookingCom.csv")
+
+        changePage()
