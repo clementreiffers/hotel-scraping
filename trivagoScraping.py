@@ -88,10 +88,15 @@ def nextResearchHotelPage():
     driver.find_element(by="xpath", value="//button[@data-testid='next-result-page']").click()
 
 
-def copyHotelsDataFromResearch(hotel):
-    # return [names, grades, prices, localisations, links]
-    return ["Name", "Grade", "Prices", "Localisations", "Links"]
-    # print("Get hotel data")
+def copyHotelsDataFromResearch(names, grades, prices, localisations, links, index):
+    name = names[index].text
+    print(name)
+    # grade =
+    # price =
+    # localisation =
+    # link =
+    # return [name, grade, price, localisation, link]
+    return [name, "Grade", "Price", "Localisations", "Links"]
 
 
 def copyHotelsToCsvLoop(fileName):
@@ -103,7 +108,8 @@ def copyHotelsToCsvLoop(fileName):
         time.sleep(10)
         for hotel in hotelsList:
             time.sleep(2)
-            cf.appendToCsv(copyHotelsDataFromResearch(hotel), fileName)
+            copyHotelsDataFromResearch(hotel)
+            # cf.appendToCsv(copyHotelsDataFromResearch(hotel), fileName)
         try:
             nextResearchHotelPage()
         except:
@@ -114,11 +120,23 @@ def copyHotelsToCsvLoop(fileName):
 if __name__ == '__main__':
     driver = webdriver.Firefox()
     driver.maximize_window()
-    driver.get("https://www.trivago.com")
-    selectHoteltab()
-    writeCity("Paris")
-    selectDate('2022-04-19')
-    selectDate('2022-04-20')
-    selectGhests(5, 4, 5)
-    copyHotelsToCsvLoop('trivagoScraping.csv')
+    # driver.get("https://www.trivago.com")
+
+    driver.get("https://www.trivago.com/en-US/lm/hotels-paris-france?search=200-22235;dr-20220419-20220420")
+    time.sleep(10)
+    hotelsList = driver.find_elements(by="xpath", value="//li[@data-testid='accommodation-list-element']")
+    names = driver.find_elements(by="xpath", value="//button[@data-testid='item-name']")
+    index = 0
+    for hotel in hotelsList:
+        time.sleep(2)
+        copyHotelsDataFromResearch(names, "f", "f", "f", "f", index)
+        index += 1
+        # cf.appendToCsv(copyHotelsDataFromResearch(hotel), fileName)
+
+    # selectHoteltab()
+    # writeCity("Paris")
+    # selectDate('2022-04-19')
+    # selectDate('2022-04-20')
+    # selectGhests(5, 4, 5)
+    # copyHotelsToCsvLoop('trivagoScraping.csv')
     driver.close()
