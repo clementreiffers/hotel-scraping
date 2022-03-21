@@ -53,7 +53,7 @@ def getLocalisationFromAdd(add):
     :return:
     """
     location = Nominatim(user_agent="main").geocode(add)
-    return [location.latitude, location.longitude]
+    return [location.latitude, location.longitude] if not None else None
 
 
 def separateDate(date):
@@ -63,3 +63,7 @@ def separateDate(date):
     day, month, year = date.split("/")
     month = monthCorrespondances[month]
     return day, month, year
+
+
+if __name__ == '__main__':
+    print(getLocalisationFromAdd("7 cours du danube, Marne la vallee"))
