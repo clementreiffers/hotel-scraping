@@ -89,9 +89,17 @@ def get_names_and_links():
 
 
 def get_grades():
-    return list(map(lambda grade: grade.text + "/10" if grade is not None else np.nan,
-                    driver.find_elements(by="xpath", value="//div[contains(@class, '_9c5f726ff bd528f9ea6')]")))
+    grades = []
+    cards = get_cards()
+    print(len(cards))
+    for card in cards:
+        try :
+            grade = card.find_element(by="xpath", value="./*//div[contains(@class, '_9c5f726ff bd528f9ea6')]")
+            grades.append(grade.text if not None else np.nan)
+        except:
+            grades.append(np.nan)
 
+    return grades
 
 def get_prices():
     return list(map(lambda price: price.text.split(" ")[1] if price is not None else np.nan,
@@ -103,10 +111,13 @@ def get_localisations():
                     driver.find_elements(by="xpath", value="//span[contains(@data-testid, 'address')]")))
 
 
+def get_cards():
+    return driver.find_elements(by="xpath", value="//div[contains(@class, '_7192d3184')]")
+
+
 def get_stars():
-    cards = driver.find_elements(by="xpath", value="//div[contains(@data-testid, 'property-card')]")
     stars = []
-    for i in cards:
+    for i in get_cards():
         nbr_stars = i.find_elements(by="xpath", value='./*//div[contains(@data-testid, "rating-stars")]/span')
         stars.append(len(nbr_stars) if nbr_stars else np.nan)
 
@@ -215,23 +226,13 @@ def main(infos, filename):
     cf.createCsv(["name", "stars", "grade", "price", "localisation", "link"], 'bookingCom.csv')
 
     while True:
-        cf.appendToCsv(getHotels(), filename)
+        cf.appendToCsv(get_hotels(), filename)
 
         changePage()
 
 
 if __name__ == '__main__':
-    # main(["paris", "20/05/2022", "23/05/2022", 2, 2, 2, [5, 6]], "bookingCom.csv")
-    # driver.get(
-    #     "https://www.booking.com/index.fr.html?label=gen173nr-1BCAEoggI46AdIM1gEaE2IAQGYAQ24ARfIAQzYAQHoAQGIAgGoAgO4Arf4yJEGwAIB0gIkNmMwYWYwNGUtNGY3Ni00ZTk3LThjOGUtZWQ0OTEwMDZkZGMw2AIF4AIB;sid=4870985d274b91999c83d2a5d6f77393;keep_landing=1&sb_price_type=total&")
-    # driver.close()
+    main(["paris", "20/05/2022", "23/05/2022", 2, 2, 2, [5, 6]], "bookingCom.csv")
     driver.get(
-        "https://www.booking.com/searchresults.fr.html?label=gen173nr-1FCAEoggI46AdIM1gEaE2IAQGYAQ24ARfIAQzYAQHoAQH4AQuIAgGoAgO4Arf4yJEGwAIB0gIkNmMwYWYwNGUtNGY3Ni00ZTk3LThjOGUtZWQ0OTEwMDZkZGMw2AIG4AIB&sid=5cede8c7c0d5a4578b84fde58a784f27&aid=304142&sb=1&src=searchresults&src_elem=sb&error_url=https%3A%2F%2Fwww.booking.com%2Fsearchresults.fr.html%3Flabel%3Dgen173nr-1FCAEoggI46AdIM1gEaE2IAQGYAQ24ARfIAQzYAQHoAQH4AQuIAgGoAgO4Arf4yJEGwAIB0gIkNmMwYWYwNGUtNGY3Ni00ZTk3LThjOGUtZWQ0OTEwMDZkZGMw2AIG4AIB%3Bsid%3D5cede8c7c0d5a4578b84fde58a784f27%3Btmpl%3Dsearchresults%3Bac_click_type%3Db%3Bac_position%3D0%3Bage%3D5%3Bage%3D6%3Bclass_interval%3D1%3Bdest_id%3D-1456928%3Bdest_type%3Dcity%3Bdtdisc%3D0%3Bfrom_sf%3D1%3Bgroup_adults%3D2%3Bgroup_children%3D2%3Biata%3DPAR%3Binac%3D0%3Bindex_postcard%3D0%3Blabel_click%3Dundef%3Bno_rooms%3D2%3Boffset%3D0%3Bpostcard%3D0%3Braw_dest_type%3Dcity%3Broom1%3DA%252C5%3Broom2%3DA%252C6%3Bsb_price_type%3Dtotal%3Bsearch_selected%3D1%3Bshw_aparth%3D1%3Bslp_r_match%3D0%3Bsrc%3Dindex%3Bsrc_elem%3Dsb%3Bsrpvid%3D36159ce3cfd9015a%3Bss%3DParis%252C%2520%25C3%258Ele-de-France%252C%2520France%3Bss_all%3D0%3Bss_raw%3Dparis%3Bssb%3Dempty%3Bsshis%3D0%26%3B&ss=Paris&is_ski_area=0&ssne=Paris&ssne_untouched=Paris&city=-1456928&checkin_year=2022&checkin_month=5&checkin_monthday=23&checkout_year=2022&checkout_month=5&checkout_monthday=24&group_adults=2&group_children=2&age=5&age=6&no_rooms=2&from_sf=1&sr_change_search=2&offset=75")
-    accept_cookies()
-    while True:
-        grades = get_grades()
-        print(grades)
-        print(len(grades))
-        if (len(grades) < 25):
-            break
-        changePage()
+        "https://www.booking.com/index.fr.html?label=gen173nr-1BCAEoggI46AdIM1gEaE2IAQGYAQ24ARfIAQzYAQHoAQGIAgGoAgO4Arf4yJEGwAIB0gIkNmMwYWYwNGUtNGY3Ni00ZTk3LThjOGUtZWQ0OTEwMDZkZGMw2AIF4AIB;sid=4870985d274b91999c83d2a5d6f77393;keep_landing=1&sb_price_type=total&")
+    driver.close()
