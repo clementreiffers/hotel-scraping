@@ -19,8 +19,14 @@ monthCorrespondances = {
 }
 
 
-def addRows(infos, file, isHead=False):
-    if isHead:
+def addRows(infos, file, is_head=False):
+    """
+    :param infos: all infos you want to put in
+    :param file: File object you want to write in
+    :param is_head: True if you just want to put 1 line
+    :return: None
+    """
+    if is_head:
         csv.writer(file).writerow(infos)
     else:
         for j in range(len(infos[0])):
@@ -32,7 +38,7 @@ def createCsv(infos, file):
     """
     :param infos: send the head of the csv ex : ["name", "grade", "price", "localisation", "link"]
     :param file: the name of the file you want to create ex: "test.csv"
-    :return:
+    :return: None
     """
     f = open(file, 'w')
     addRows(infos, f, True)
@@ -40,9 +46,9 @@ def createCsv(infos, file):
 
 def appendToCsv(infos, file):
     """
-    :param infos: [[allNames], [allGrade],[allPrices], [allLocalisations], [allLinks]]
+    :param infos: [[allNames], [allGrades],[allPrices], [allLocalisations], [allLinks]]
     :param file: name of the csv ex : "file.csv"
-    :return:
+    :return: None
     """
     f = open(file, "a")
     addRows(infos, f)
@@ -51,7 +57,7 @@ def appendToCsv(infos, file):
 def getLocalisationFromAdd(add):
     """
     :param add: "address_hotel"
-    :return:
+    :return: [latitude, longitude] else None
     """
     location = Nominatim(user_agent="main").geocode(add)
     return [location.latitude, location.longitude] if location is not None else np.nan
@@ -61,6 +67,7 @@ def getLocalisationFromAdd(add):
 def separateDate(date):
     """
     :param date: dd/MM/yyyy
+    :return: day, month, year
     """
     day, month, year = date.split("/")
     month = monthCorrespondances[month]
