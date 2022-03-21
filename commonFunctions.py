@@ -57,6 +57,7 @@ def getLocalisationFromAdd(add):
     return [location.latitude, location.longitude] if location is not None else np.nan
 
 
+
 def separateDate(date):
     """
     :param date: dd/MM/yyyy
