@@ -65,6 +65,3 @@ def separateDate(date):
     month = monthCorrespondances[month]
     return day, month, year
 
-
-if __name__ == '__main__':
-    print(getLocalisationFromAdd("7 cours du danube, Marne la vallee"))
