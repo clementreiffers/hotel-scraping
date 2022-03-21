@@ -86,11 +86,15 @@ def selectGhests(adultsNumber, childrenNumber, roomsNumber):
 
 def copyHotelsToCsvLoop(fileName):
     time.sleep(2)
-    driver.find_element(by="xpath", value="//label[@data-title='Hotel']").click()
+    driver.find_element(by="xpath", value="//label[@data-title='Hotel']").click() #Click hotel view filter
+    time.sleep(2)
+    driver.find_element(by="xpath", value="//button[@data-testid='switch-view-button-desktop']").click() # Click map cross
+    time.sleep(2)
     cf.createCsv(["name", "grade", "price", "localisation", "link"], fileName)
     nextPageButtonPresent = True
     while nextPageButtonPresent:
-        cf.appendToCsv(getHotels(), fileName)
+        # cf.appendToCsv(getHotels(), fileName)
+        getHotels()
         print("Hotels data have been written")
         try:
             driver.find_element(by="xpath", value="//button[@data-testid='next-result-page']").click()
@@ -116,11 +120,11 @@ def clickAllLocalisationButtons():
     for addressButton in addressesButtons:
         time.sleep(0.5)
         addressButton.click()
-    showHotelsPoliciesButtons = driver.find_elements(by="xpath",
-                                                     value="//button[@data-testid='hotel-policies-show-more']")
-    for showHotelPoliciesButton in showHotelsPoliciesButtons:
-        time.sleep(0.5)
-        showHotelPoliciesButton.click()
+    # showHotelsPoliciesButtons = driver.find_elements(by="xpath",
+    #                                                  value="//button[@data-testid='hotel-policies-show-more']")
+    # for showHotelPoliciesButton in showHotelsPoliciesButtons:
+    #     time.sleep(0.5)
+    #     showHotelPoliciesButton.click()
 
 
 def getHotelsName():
@@ -140,8 +144,11 @@ def getHotelsPrice():
 
 def getHotelsLocation():
     return list(
-        map(lambda localisation: localisation.text,
-            driver.find_elements(by="xpath", value="//span[@itemprop='streetAddress']")))
+        map(lambda location: location.text,
+            driver.find_elements(by="xpath", value="//address[@data-testid='info-slideout-map-address']")))
+    # return list(
+    #     map(lambda localisation: localisation.text,
+    #         driver.find_elements(by="xpath", value="//span[@itemprop='streetAddress']")))
 
 
 def getHotelsLink():
