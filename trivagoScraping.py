@@ -13,7 +13,7 @@ import datetime
 import time
 import commonFunctions as cf
 
-monthDictionnary = {
+month_dictionary = {
     "January": "01",
     "February": "02",
     "March": "03",
@@ -59,7 +59,7 @@ def select_date(date_choosen):
             driver.find_element(by="xpath", value="//button[@data-testid='calendar-button-next']").click()
             date_calendar = driver.find_element(by="xpath", value="//button[contains(@class, 'cursor-auto font-bold')]") \
                 .text.split(' ')
-            date_calendar = [date_calendar[1], monthDictionnary[date_calendar[0]]]
+            date_calendar = [date_calendar[1], month_dictionary[date_calendar[0]]]
 
         time.sleep(2)
         driver.find_element(by="xpath", value="//time[@datetime='" + date_choosen + "']") \
@@ -129,7 +129,7 @@ def click_all_localisation_buttons():
         time.sleep(0.5)
         addressButton.click()
     show_hotels_policies_buttons = driver.find_elements(by="xpath",
-                                                     value="//button[@data-testid='hotel-policies-show-more']")
+                                                        value="//button[@data-testid='hotel-policies-show-more']")
     for showHotelPoliciesButton in show_hotels_policies_buttons:
         time.sleep(0.5)
         showHotelPoliciesButton.click()
@@ -173,11 +173,26 @@ def get_hotels_stars():
 if __name__ == '__main__':
     driver = webdriver.Firefox()
     driver.maximize_window()
-    driver.get("https://www.trivago.com")
-    select_hotel_tab()
-    write_city("Paris")
-    select_date('2022-04-20')
-    select_date('2022-04-21')
-    select_ghests(5, 4, 5)
-    copy_hotels_to_csv_loop("trivagoScraping.csv")
-    driver.close()
+    # driver.get("https://www.trivago.com")
+    # select_hotel_tab()
+    # write_city("Paris")
+    # select_date('2022-04-20')
+    # select_date('2022-04-21')
+    # select_ghests(5, 4, 5)
+    # copy_hotels_to_csv_loop("trivagoScraping.csv")
+    # driver.close()
+
+    driver.get("https://www.trivago.com/en-US/srl/hotels-paris-france?search=101-2;200-22235;dr-20220331-20220401;pa-4")
+    time.sleep(6)
+    list_Accodmodation_type = driver.find_elements(by="xpath", value="//button[@data-testid='accommodation-type']")
+    temp_list = []
+    for accomodation in list_Accodmodation_type:
+        try:
+            temp_list.append(accomodation.find_element \
+                                 (by="xpath", value="./span/span/meta[@itemprop='ratingValue']").get_attribute \
+                                 ("content"))
+        except:
+            temp_list.append(None)
+
+    for temp in temp_list:
+        print(temp)
