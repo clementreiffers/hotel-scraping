@@ -4,6 +4,8 @@ import numpy as np
 from selenium import webdriver
 import commonFunctions as cf
 
+driver = webdriver.Firefox()
+
 
 def search_city(city):
     time.sleep(2)
@@ -110,23 +112,30 @@ def changePage():
     driver.find_element(by="xpath", value="//button[contains(@aria-label, 'Page suivante')]").click()
 
 
-if __name__ == '__main__':
-    driver = webdriver.Firefox()
+def main(infos, filename):
+    """
+    :param filename: example.csv
+    :param infos: [city, start_date, end_date]
+    :return:
+    """
+    city, start_date, end_date = infos[0], infos[1], infos[2]
+
     driver.get(
         "https://www.booking.com/index.fr.html?label=gen173nr-1BCAEoggI46AdIM1gEaE2IAQGYAQ24ARfIAQzYAQHoAQGIAgGoAgO4Arf4yJEGwAIB0gIkNmMwYWYwNGUtNGY3Ni00ZTk3LThjOGUtZWQ0OTEwMDZkZGMw2AIF4AIB;sid=4870985d274b91999c83d2a5d6f77393;keep_landing=1&sb_price_type=total&")
     accept_cookies()
 
-    search_city("Paris")
-    set_date("20/05/2022", "23/05/2022")
+    search_city(city)
+    set_date(start_date, end_date)
     applyFamilyAndDate()
 
     cf.createCsv(["name", "stars", "grade", "price", "localisation", "link"], 'bookingCom.csv')
 
     while True:
-        cf.appendToCsv(getHotels(), "bookingCom.csv")
+        cf.appendToCsv(getHotels(), filename)
 
         changePage()
 
-    cf.createCsv(["name", "stars", "grade", "price", "localisation", "link"], 'bookingCom.csv')
-    cf.appendToCsv([["test", "test2"], ["test", "test2"], ["test", "test2"], ["test", "test2"], ["test", "test2"]],
-                   "bookingCom.csv")
+
+if __name__ == '__main__':
+    main(["paris", "20/05/2022", "23/05/2022"], "bookingCom.csv")
+    driver.close()
