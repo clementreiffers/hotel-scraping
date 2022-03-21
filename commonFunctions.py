@@ -1,4 +1,5 @@
 import csv
+import numpy as np
 from geopy.geocoders import Nominatim
 
 # maybe create an english for certain cases
@@ -53,7 +54,8 @@ def getLocalisationFromAdd(add):
     :return:
     """
     location = Nominatim(user_agent="main").geocode(add)
-    return [location.latitude, location.longitude]
+    return [location.latitude, location.longitude] if location is not None else np.nan
+
 
 
 def separateDate(date):
@@ -63,3 +65,4 @@ def separateDate(date):
     day, month, year = date.split("/")
     month = monthCorrespondances[month]
     return day, month, year
+
