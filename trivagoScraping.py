@@ -86,9 +86,10 @@ def selectGhests(adultsNumber, childrenNumber, roomsNumber):
 
 def copyHotelsToCsvLoop(fileName):
     time.sleep(2)
-    driver.find_element(by="xpath", value="//label[@data-title='Hotel']").click() #Click hotel view filter
+    driver.find_element(by="xpath", value="//label[@data-title='Hotel']").click()  # Click hotel view filter
     time.sleep(2)
-    driver.find_element(by="xpath", value="//button[@data-testid='switch-view-button-desktop']").click() # Click map cross
+    driver.find_element(by="xpath",
+                        value="//button[@data-testid='switch-view-button-desktop']").click()  # Click map cross
     time.sleep(2)
     cf.createCsv(["name", "grade", "price", "localisation", "link"], fileName)
     nextPageButtonPresent = True
@@ -107,12 +108,16 @@ def copyHotelsToCsvLoop(fileName):
 def getHotels():
     time.sleep(4)
     clickAllLocalisationButtons()
-    names = getHotelsName()
-    grades = getHotelsGrade()
-    prices = getHotelsPrice()
-    locations = getHotelsLocation()
-    links = getHotelsLink()
-    return [names, grades, prices, locations, links]
+    namesList = getHotelsName()
+    gradesList = getHotelsGrade()
+    pricesList = getHotelsPrice()
+    locationsList = getHotelsLocation()
+    linksList = getHotelsLink()
+    starsList = getHotelsStars()
+    # for stars in starsList:
+    #     print(stars)
+    # chamberLink = getHotelsChamberLin()
+    return [namesList, gradesList, pricesList, locationsList, linksList]
 
 
 def clickAllLocalisationButtons():
@@ -154,6 +159,11 @@ def getHotelsLocation():
 def getHotelsLink():
     return list(
         map(lambda link: link.get_attribute("href"), driver.find_elements(by="xpath", value="//a[@itemprop='url']")))
+
+
+def getHotelsStars():
+    return list(
+        map(lambda starGrade: starGrade.get_attribute('content'), driver.find_elements(by="xpath", value="//meta[@itemprop='ratingValue']")))
 
 
 if __name__ == '__main__':
