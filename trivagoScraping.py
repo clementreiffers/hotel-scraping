@@ -94,8 +94,8 @@ def copyHotelsToCsvLoop(fileName):
     cf.createCsv(["name", "grade", "price", "localisation", "link"], fileName)
     nextPageButtonPresent = True
     while nextPageButtonPresent:
-        # cf.appendToCsv(getHotels(), fileName)
-        getHotels()
+        cf.appendToCsv(getHotels(), fileName)
+        # getHotels()
         print("Hotels data have been written")
         try:
             driver.find_element(by="xpath", value="//button[@data-testid='next-result-page']").click()
