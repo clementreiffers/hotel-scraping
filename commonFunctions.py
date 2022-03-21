@@ -63,7 +63,6 @@ def getLocalisationFromAdd(add):
     return [location.latitude, location.longitude] if location is not None else np.nan
 
 
-
 def separateDate(date):
     """
     :param date: dd/MM/yyyy
@@ -72,4 +71,3 @@ def separateDate(date):
     day, month, year = date.split("/")
     month = monthCorrespondances[month]
     return day, month, year
-

@@ -11,6 +11,8 @@ def search_city(city):
     time.sleep(2)
     driver.find_element(by="id", value="ss").send_keys(city)
 
+
+def search():
     time.sleep(2)
     driver.find_element(by="class name", value="sb-searchbox__button ").click()
 
@@ -79,24 +81,46 @@ def set_date(start_date, end_date):
     select_day(end_day)
 
 
-def getHotels():
-    time.sleep(2)
+def get_names_and_links():
     hostel_list = driver.find_elements(by="class name", value="fb01724e5b")
-    names = list(map(lambda hotel: hotel.text.split("\n")[0], hostel_list))
+    names = list(map(lambda hotel: hotel.text.split("\n")[0] if hotel is not None else np.nan, hostel_list))
     links = list(map(lambda hotel: hotel.get_attribute("href"), hostel_list))
-    grades = list(map(lambda grade: grade.text + "/10",
-                      driver.find_elements(by="xpath", value="//div[contains(@class, '_9c5f726ff bd528f9ea6')]")))
-    prices = list(map(lambda price: price.text.split(" ")[1],
-                      driver.find_elements(by="xpath", value="//span[contains(@class, 'fde444d7ef _e885fdc12')]")))
-    localisations = list(map(lambda address: cf.getLocalisationFromAdd(address.text),
-                             driver.find_elements(by="xpath", value="//span[contains(@data-testid, 'address')]")))
+    return names, links
 
+
+def get_grades():
+    return list(map(lambda grade: grade.text + "/10" if grade is not None else np.nan,
+                    driver.find_elements(by="xpath", value="//div[contains(@class, '_9c5f726ff bd528f9ea6')]")))
+
+
+def get_prices():
+    return list(map(lambda price: price.text.split(" ")[1] if price is not None else np.nan,
+                    driver.find_elements(by="xpath", value="//span[contains(@class, 'fde444d7ef _e885fdc12')]")))
+
+
+def get_localisations():
+    return list(map(lambda address: cf.getLocalisationFromAdd(address.text) if address is not None else np.nan,
+                    driver.find_elements(by="xpath", value="//span[contains(@data-testid, 'address')]")))
+
+
+def get_stars():
     cards = driver.find_elements(by="xpath", value="//div[contains(@data-testid, 'property-card')]")
-
     stars = []
     for i in cards:
         nbr_stars = i.find_elements(by="xpath", value='./*//div[contains(@data-testid, "rating-stars")]/span')
         stars.append(len(nbr_stars) if nbr_stars else np.nan)
+
+    return stars
+
+
+def get_hotels():
+    time.sleep(2)
+    names, links = get_names_and_links()
+    grades = get_grades()
+    prices = get_prices()
+    localisations = get_localisations()
+    stars = get_stars()
+
     return [names, stars, grades, prices, localisations, links]
 
 
@@ -112,19 +136,79 @@ def changePage():
     driver.find_element(by="xpath", value="//button[contains(@aria-label, 'Page suivante')]").click()
 
 
+def get_current_nbr_adults_children_rooms():
+    return list(map(lambda nbr: int(nbr.text),
+                    driver.find_elements(by="xpath", value="//span[contains(@class, 'bui-stepper__display')]")))
+
+
+def get_nbr_adults():
+    return get_current_nbr_adults_children_rooms()[0]
+
+
+def get_nbr_children():
+    return get_current_nbr_adults_children_rooms()[1]
+
+
+def get_nbr_rooms():
+    return get_current_nbr_adults_children_rooms()[2]
+
+
+def set_nbr(btn, current_nbr, nbr_wanted):
+    """
+    :param btn: the button we want to click
+    :param current_nbr: fonction to get the current number
+    :param nbr_wanted: the number wanted by customer
+    :return: None
+    """
+    while current_nbr() < nbr_wanted:
+        time.sleep(0.5)
+        btn.click()
+
+
+def set_family_and_room(nbr_adults, nbr_children, nbr_room, ages_of_children):
+    """
+    :param nbr_adults: int
+    :param nbr_children: int
+    :param nbr_room: int
+    :param ages_of_children: []
+    :return: None
+    """
+    time.sleep(2)
+    driver.find_element(by="id", value="xp__guests__toggle").click()
+
+    btn_adults, btn_children, btn_room = driver.find_elements(by="xpath",
+                                                              value="//button[contains(@class, 'bui-button bui-button--secondary bui-stepper__add-button')]")
+
+    set_nbr(btn_adults, get_nbr_adults, nbr_adults)
+
+    set_nbr(btn_children, get_nbr_children, nbr_children)
+
+    set_nbr(btn_room, get_nbr_rooms, nbr_room)
+
+    selects = driver.find_elements(by="xpath", value="//select[contains(@name, 'age')]")
+
+    for i in range(len(selects)):
+        selects[i].find_element(by="xpath", value="./option[contains(@value, '{}')]".format(ages_of_children[i])) \
+            .click()
+
+
 def main(infos, filename):
     """
     :param filename: example.csv
-    :param infos: [city, start_date, end_date]
+    :param infos: [city, start_date, end_date, nbr_adults, nbr_children, nbr_room, [age_children] ]
     :return:
     """
     city, start_date, end_date = infos[0], infos[1], infos[2]
+    nbr_adults, nbr_children, nbr_room, ages_of_children = infos[3], infos[4], infos[5], infos[6]
 
     driver.get(
         "https://www.booking.com/index.fr.html?label=gen173nr-1BCAEoggI46AdIM1gEaE2IAQGYAQ24ARfIAQzYAQHoAQGIAgGoAgO4Arf4yJEGwAIB0gIkNmMwYWYwNGUtNGY3Ni00ZTk3LThjOGUtZWQ0OTEwMDZkZGMw2AIF4AIB;sid=4870985d274b91999c83d2a5d6f77393;keep_landing=1&sb_price_type=total&")
     accept_cookies()
 
     search_city(city)
+    set_family_and_room(nbr_adults, nbr_children, nbr_room, ages_of_children)
+    search()
+
     set_date(start_date, end_date)
     applyFamilyAndDate()
 
@@ -137,5 +221,17 @@ def main(infos, filename):
 
 
 if __name__ == '__main__':
-    main(["paris", "20/05/2022", "23/05/2022"], "bookingCom.csv")
-    driver.close()
+    # main(["paris", "20/05/2022", "23/05/2022", 2, 2, 2, [5, 6]], "bookingCom.csv")
+    # driver.get(
+    #     "https://www.booking.com/index.fr.html?label=gen173nr-1BCAEoggI46AdIM1gEaE2IAQGYAQ24ARfIAQzYAQHoAQGIAgGoAgO4Arf4yJEGwAIB0gIkNmMwYWYwNGUtNGY3Ni00ZTk3LThjOGUtZWQ0OTEwMDZkZGMw2AIF4AIB;sid=4870985d274b91999c83d2a5d6f77393;keep_landing=1&sb_price_type=total&")
+    # driver.close()
+    driver.get(
+        "https://www.booking.com/searchresults.fr.html?label=gen173nr-1FCAEoggI46AdIM1gEaE2IAQGYAQ24ARfIAQzYAQHoAQH4AQuIAgGoAgO4Arf4yJEGwAIB0gIkNmMwYWYwNGUtNGY3Ni00ZTk3LThjOGUtZWQ0OTEwMDZkZGMw2AIG4AIB&sid=5cede8c7c0d5a4578b84fde58a784f27&aid=304142&sb=1&src=searchresults&src_elem=sb&error_url=https%3A%2F%2Fwww.booking.com%2Fsearchresults.fr.html%3Flabel%3Dgen173nr-1FCAEoggI46AdIM1gEaE2IAQGYAQ24ARfIAQzYAQHoAQH4AQuIAgGoAgO4Arf4yJEGwAIB0gIkNmMwYWYwNGUtNGY3Ni00ZTk3LThjOGUtZWQ0OTEwMDZkZGMw2AIG4AIB%3Bsid%3D5cede8c7c0d5a4578b84fde58a784f27%3Btmpl%3Dsearchresults%3Bac_click_type%3Db%3Bac_position%3D0%3Bage%3D5%3Bage%3D6%3Bclass_interval%3D1%3Bdest_id%3D-1456928%3Bdest_type%3Dcity%3Bdtdisc%3D0%3Bfrom_sf%3D1%3Bgroup_adults%3D2%3Bgroup_children%3D2%3Biata%3DPAR%3Binac%3D0%3Bindex_postcard%3D0%3Blabel_click%3Dundef%3Bno_rooms%3D2%3Boffset%3D0%3Bpostcard%3D0%3Braw_dest_type%3Dcity%3Broom1%3DA%252C5%3Broom2%3DA%252C6%3Bsb_price_type%3Dtotal%3Bsearch_selected%3D1%3Bshw_aparth%3D1%3Bslp_r_match%3D0%3Bsrc%3Dindex%3Bsrc_elem%3Dsb%3Bsrpvid%3D36159ce3cfd9015a%3Bss%3DParis%252C%2520%25C3%258Ele-de-France%252C%2520France%3Bss_all%3D0%3Bss_raw%3Dparis%3Bssb%3Dempty%3Bsshis%3D0%26%3B&ss=Paris&is_ski_area=0&ssne=Paris&ssne_untouched=Paris&city=-1456928&checkin_year=2022&checkin_month=5&checkin_monthday=23&checkout_year=2022&checkout_month=5&checkout_monthday=24&group_adults=2&group_children=2&age=5&age=6&no_rooms=2&from_sf=1&sr_change_search=2&offset=75")
+    accept_cookies()
+    while True:
+        grades = get_grades()
+        print(grades)
+        print(len(grades))
+        if (len(grades) < 25):
+            break
+        changePage()
