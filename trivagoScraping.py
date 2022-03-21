@@ -91,6 +91,7 @@ def copyHotelsToCsvLoop(fileName):
     driver.find_element(by="xpath",
                         value="//button[@data-testid='switch-view-button-desktop']").click()  # Click map cross
     time.sleep(2)
+    # cf.createCsv(["name", "grade", "price", "localisation", "link", "stars"], fileName)
     cf.createCsv(["name", "grade", "price", "localisation", "link"], fileName)
     nextPageButtonPresent = True
     while nextPageButtonPresent:
@@ -114,9 +115,11 @@ def getHotels():
     locationsList = getHotelsLocation()
     linksList = getHotelsLink()
     starsList = getHotelsStars()
+    # offerLinksList =
     # for stars in starsList:
     #     print(stars)
     # chamberLink = getHotelsChamberLin()
+    # return [namesList, gradesList, pricesList, locationsList, linksList, starsList]
     return [namesList, gradesList, pricesList, locationsList, linksList]
 
 
@@ -125,11 +128,11 @@ def clickAllLocalisationButtons():
     for addressButton in addressesButtons:
         time.sleep(0.5)
         addressButton.click()
-    # showHotelsPoliciesButtons = driver.find_elements(by="xpath",
-    #                                                  value="//button[@data-testid='hotel-policies-show-more']")
-    # for showHotelPoliciesButton in showHotelsPoliciesButtons:
-    #     time.sleep(0.5)
-    #     showHotelPoliciesButton.click()
+    showHotelsPoliciesButtons = driver.find_elements(by="xpath",
+                                                     value="//button[@data-testid='hotel-policies-show-more']")
+    for showHotelPoliciesButton in showHotelsPoliciesButtons:
+        time.sleep(0.5)
+        showHotelPoliciesButton.click()
 
 
 def getHotelsName():
@@ -163,7 +166,8 @@ def getHotelsLink():
 
 def getHotelsStars():
     return list(
-        map(lambda starGrade: starGrade.get_attribute('content'), driver.find_elements(by="xpath", value="//meta[@itemprop='ratingValue']")))
+        map(lambda starGrade: starGrade.get_attribute('content'),
+            driver.find_elements(by="xpath", value="//meta[@itemprop='ratingValue']")))
 
 
 if __name__ == '__main__':
