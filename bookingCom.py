@@ -230,7 +230,7 @@ def main(infos, filename):
     set_date(start_date, end_date)
     applyFamilyAndDate()
 
-    cf.createCsv(["name", "stars", "grade", "price", "localisation", "link"], 'bookingCom.csv')
+    cf.createCsv(["name", "grade", "star", "price", "address", "localisation", "link"], 'bookingCom.csv')
 
     while True:
         try:

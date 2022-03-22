@@ -53,9 +53,10 @@ Analyse des données et prédiction du prix d'un hotel en fonction de son emplac
 ## format à utiliser 
 
 monnaie à utiliser: EUR 
-date : dd/MM/yyyy 
-csv : noms, notes, etoiles, prix, adresses, gps, liens 
-fonction à mettre en commun :
+date : dd/MM/yyyy
+csv : nom, note, etoile, prix, adresse, gps, lien
+(mettez les noms d'entetes du csv en anglais, singulier)
+fonction à mettre en commun : 
 - getLocalisationFromAdd
 - createCsv
 - appendToCsv
