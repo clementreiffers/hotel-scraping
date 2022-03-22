@@ -81,11 +81,17 @@ def set_date(start_date, end_date):
     select_day(end_day)
 
 
-def get_names_and_links():
-    hostel_list = driver.find_elements(by="class name", value="fb01724e5b")
-    names = list(map(lambda hotel: hotel.text.split("\n")[0] if hotel is not None else np.nan, hostel_list))
-    links = list(map(lambda hotel: hotel.get_attribute("href"), hostel_list))
-    return names, links
+def get_names_and_links_in_cards():
+    return driver.find_elements(by="class name", value="fb01724e5b")
+
+
+def get_names():
+    return list(
+        map(lambda hotel: hotel.text.split("\n")[0] if hotel is not None else np.nan, get_names_and_links_in_cards()))
+
+
+def get_links():
+    return list(map(lambda hotel: hotel.get_attribute("href"), get_names_and_links_in_cards()))
 
 
 def get_grades():
@@ -93,7 +99,7 @@ def get_grades():
     cards = get_cards()
     print(len(cards))
     for card in cards:
-        try :
+        try:
             grade = card.find_element(by="xpath", value="./*//div[contains(@class, '_9c5f726ff bd528f9ea6')]")
             grades.append(grade.text if not None else np.nan)
         except:
@@ -101,14 +107,20 @@ def get_grades():
 
     return grades
 
+
 def get_prices():
     return list(map(lambda price: price.text.split(" ")[1] if price is not None else np.nan,
                     driver.find_elements(by="xpath", value="//span[contains(@class, 'fde444d7ef _e885fdc12')]")))
 
 
-def get_localisations():
-    return list(map(lambda address: cf.getLocalisationFromAdd(address.text) if address is not None else np.nan,
+def get_addr():
+    return list(map(lambda address: address.text if address is not None else np.nan,
                     driver.find_elements(by="xpath", value="//span[contains(@data-testid, 'address')]")))
+
+
+def get_gps():
+    return list(
+        map(lambda address: cf.getLocalisationFromAdd(address) if address is not None else np.nan, get_addr()))
 
 
 def get_cards():
@@ -126,13 +138,8 @@ def get_stars():
 
 def get_hotels():
     time.sleep(2)
-    names, links = get_names_and_links()
-    grades = get_grades()
-    prices = get_prices()
-    localisations = get_localisations()
-    stars = get_stars()
 
-    return [names, stars, grades, prices, localisations, links]
+    return [get_names(), get_grades(), get_stars(), get_prices(), get_addr(), get_gps(), get_links()]
 
 
 def applyFamilyAndDate():
@@ -226,9 +233,12 @@ def main(infos, filename):
     cf.createCsv(["name", "stars", "grade", "price", "localisation", "link"], 'bookingCom.csv')
 
     while True:
-        cf.appendToCsv(get_hotels(), filename)
-
-        changePage()
+        try:
+            cf.appendToCsv(get_hotels(), filename)
+            changePage()
+        except:
+            driver.refresh()
+            time.sleep(5)
 
 
 if __name__ == '__main__':

@@ -59,8 +59,11 @@ def getLocalisationFromAdd(add):
     :param add: "address_hotel"
     :return: [latitude, longitude] else None
     """
-    location = Nominatim(user_agent="main").geocode(add)
-    return [location.latitude, location.longitude] if location is not None else np.nan
+    try:
+        location = Nominatim(user_agent="main").geocode(add)
+        return [location.latitude, location.longitude] if location is not None else np.nan
+    except:
+        return np.nan
 
 
 def separateDate(date):
