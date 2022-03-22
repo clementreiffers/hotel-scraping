@@ -23,7 +23,7 @@ def select_hotel_tab():
     time.sleep(2)
     list_buttons = driver.find_elements(by="tag name", value="label")
     for button in list_buttons:
-        if button.text == "Hotel":
+        if button.text == "Hôtel":
             button.click()
 
 
@@ -34,14 +34,15 @@ def write_city(city):
     driver.find_element(by="id", value="react-autowhatever-1--item-0").click()
 
 
-def select_date(date_choosen):
+def select_date(date_chosen):
+    date_chosen = date_format_eu_to_us(date_chosen)
     time.sleep(2)
     try:
-        driver.find_element(by="xpath", value="//time[@datetime='" + date_choosen + "']") \
+        driver.find_element(by="xpath", value="//time[@datetime='" + date_chosen + "']") \
             .find_element(by="xpath", value="..") \
             .click()
     except:
-        date_chosen_arr = date_choosen.split('-')
+        date_chosen_arr = date_chosen.split('-')
         date_calendar = driver.find_element(by="xpath", value="//button[contains(@class, 'cursor-auto font-bold')]") \
             .text.split(' ')
         while date_calendar[1] != date_chosen_arr[1] and date_calendar[1] != date_chosen_arr[1]:
@@ -52,9 +53,14 @@ def select_date(date_choosen):
             date_calendar = [date_calendar[1], cf.month_digits_dictionary[date_calendar[0]]]
 
         time.sleep(2)
-        driver.find_element(by="xpath", value="//time[@datetime='" + date_choosen + "']") \
+        driver.find_element(by="xpath", value="//time[@datetime='" + date_chosen + "']") \
             .find_element(by="xpath", value="..") \
             .click()
+
+
+def date_format_eu_to_us(date):
+    date = list(reversed(date.split('-')))
+    return date[0] + '-' + date[1] + '-' + date[2]
 
 
 def select_ghests(adults_number, children_number, rooms_number):
@@ -165,8 +171,8 @@ if __name__ == '__main__':
     click_cookies_button()
     select_hotel_tab()
     write_city("Paris")
-    select_date('2022-04-20')
-    select_date('2022-04-21')
+    select_date('20-04-2022')
+    select_date('21-04-2022')
     select_ghests(5, 4, 5)
     copy_hotels_to_csv_loop("trivagoScraping.csv")
     driver.close()
