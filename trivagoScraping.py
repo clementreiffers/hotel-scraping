@@ -9,24 +9,14 @@ Created on Sat Mar  19 11:37:12 2022
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import datetime
 import time
 import commonFunctions as cf
+import numpy as np
 
-monthDictionnary = {
-    "January": "01",
-    "February": "02",
-    "March": "03",
-    "April": "04",
-    "May": "05",
-    "June": "06",
-    "July": "07",
-    "August": "08",
-    "September": "09",
-    "October": "10",
-    "November": "11",
-    "December": "12",
-}
+
+def click_cookies_button():
+    time.sleep(2)
+    driver.find_element(by="id", value="onetrust-accept-btn-handler").click()
 
 
 def select_hotel_tab():
@@ -59,7 +49,7 @@ def select_date(date_choosen):
             driver.find_element(by="xpath", value="//button[@data-testid='calendar-button-next']").click()
             date_calendar = driver.find_element(by="xpath", value="//button[contains(@class, 'cursor-auto font-bold')]") \
                 .text.split(' ')
-            date_calendar = [date_calendar[1], monthDictionnary[date_calendar[0]]]
+            date_calendar = [date_calendar[1], cf.month_digits_dictionary[date_calendar[0]]]
 
         time.sleep(2)
         driver.find_element(by="xpath", value="//time[@datetime='" + date_choosen + "']") \
@@ -86,17 +76,15 @@ def select_ghests(adults_number, children_number, rooms_number):
 
 def copy_hotels_to_csv_loop(file_name):
     time.sleep(2)
-    driver.find_element(by="xpath", value="//label[@data-title='Hotel']").click()  # Click hotel view filter
+    driver.find_element(by="xpath", value="//label[@data-title='Hôtel']").click()  # Click hotel view filter
     time.sleep(2)
     driver.find_element(by="xpath",
                         value="//button[@data-testid='switch-view-button-desktop']").click()  # Click map cross
     time.sleep(2)
-    # cf.createCsv(["name", "grade", "price", "localisation", "link", "stars"], fileName)
-    cf.createCsv(["name", "grade", "price", "localisation", "link"], file_name)
+    cf.createCsv(["name", "grade", "stars", "price", "location", "gps", "link"], file_name)
     next_page_button_present = True
     while next_page_button_present:
         cf.appendToCsv(get_hotels(), file_name)
-        # getHotels()
         print("Hotels data have been written")
         try:
             driver.find_element(by="xpath", value="//button[@data-testid='next-result-page']").click()
@@ -109,18 +97,9 @@ def copy_hotels_to_csv_loop(file_name):
 def get_hotels():
     time.sleep(4)
     click_all_localisation_buttons()
-    names_list = get_hotels_name()
-    grades_list = get_hotels_grade()
-    prices_list = get_hotels_price()
     locations_list = get_hotels_location()
-    links_list = get_hotels_link()
-    stars_list = get_hotels_stars()
-    # offerLinksList =
-    # for stars in starsList:
-    #     print(stars)
-    # chamberLink = getHotelsChamberLin()
-    # return [namesList, gradesList, pricesList, locationsList, linksList, stars_list]
-    return [names_list, grades_list, prices_list, locations_list, links_list]
+    return [get_hotels_name(), get_hotels_grade(), get_hotels_stars(), locations_list, get_hotels_gps(locations_list),
+            get_hotels_link()]
 
 
 def click_all_localisation_buttons():
@@ -128,8 +107,8 @@ def click_all_localisation_buttons():
     for addressButton in addresses_buttons:
         time.sleep(0.5)
         addressButton.click()
-    show_hotels_policies_buttons = driver.find_elements(by="xpath",
-                                                     value="//button[@data-testid='hotel-policies-show-more']")
+    show_hotels_policies_buttons = driver \
+        .find_elements(by="xpath", value="//button[@data-testid='hotel-policies-show-more']")
     for showHotelPoliciesButton in show_hotels_policies_buttons:
         time.sleep(0.5)
         showHotelPoliciesButton.click()
@@ -154,9 +133,11 @@ def get_hotels_location():
     return list(
         map(lambda location: location.text,
             driver.find_elements(by="xpath", value="//address[@data-testid='info-slideout-map-address']")))
-    # return list(
-    #     map(lambda localisation: localisation.text,
-    #         driver.find_elements(by="xpath", value="//span[@itemprop='streetAddress']")))
+
+
+def get_hotels_gps(locations_list):
+    return list(
+        map(lambda location: cf.getLocalisationFromAdd(location), locations_list))
 
 
 def get_hotels_link():
@@ -165,15 +146,23 @@ def get_hotels_link():
 
 
 def get_hotels_stars():
-    return list(
-        map(lambda star_grade: star_grade.get_attribute('content'),
-            driver.find_elements(by="xpath", value="//meta[@itemprop='ratingValue']")))
+    accomodation_type_list = driver.find_elements(by="xpath", value="//button[@data-testid='accommodation-type']")
+    stars_hotels_list = []
+    for accomodation_type in accomodation_type_list:
+        try:
+            stars_hotels_list \
+                .append(accomodation_type.find_element(by="xpath", value="./span/span/meta[@itemprop='ratingValue']") \
+                        .get_attribute("content"))
+        except:
+            stars_hotels_list.append(np.nan)
+    return stars_hotels_list
 
 
 if __name__ == '__main__':
     driver = webdriver.Firefox()
     driver.maximize_window()
-    driver.get("https://www.trivago.com")
+    driver.get("https://www.trivago.fr")
+    click_cookies_button()
     select_hotel_tab()
     write_city("Paris")
     select_date('2022-04-20')
