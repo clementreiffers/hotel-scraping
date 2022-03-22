@@ -29,6 +29,11 @@ month_dictionary = {
 }
 
 
+def click_cookies_button():
+    time.sleep(2)
+    driver.find_element(by="id", value="onetrust-accept-btn-handler").click()
+
+
 def select_hotel_tab():
     time.sleep(2)
     list_buttons = driver.find_elements(by="tag name", value="label")
@@ -86,7 +91,7 @@ def select_ghests(adults_number, children_number, rooms_number):
 
 def copy_hotels_to_csv_loop(file_name):
     time.sleep(2)
-    driver.find_element(by="xpath", value="//label[@data-title='Hotel']").click()  # Click hotel view filter
+    driver.find_element(by="xpath", value="//label[@data-title='Hôtel']").click()  # Click hotel view filter
     time.sleep(2)
     driver.find_element(by="xpath",
                         value="//button[@data-testid='switch-view-button-desktop']").click()  # Click map cross
@@ -170,7 +175,8 @@ def get_hotels_stars():
 if __name__ == '__main__':
     driver = webdriver.Firefox()
     driver.maximize_window()
-    driver.get("https://www.trivago.com")
+    driver.get("https://www.trivago.fr")
+    click_cookies_button()
     select_hotel_tab()
     write_city("Paris")
     select_date('2022-04-20')
