@@ -26,15 +26,15 @@ import commonFunctions
 # éléments de recherche
 
 city = "Paris"
-date_day = "11"
-date_month = "juillet 2022"
+date = "11/07/2022"
 current_date = datetime.date.today()
 
-current_date_day = current_date.day
+date_day, date_month, date_year = commonFunctions.separateDate(date)
+date_month_year = str(date_month) +" "+ str(date_year)
 
-current_date_month = current_date.month
-month = "0"+str(current_date_month)
-month_year = commonFunctions.monthCorrespondances.get(month) + " " + str(current_date.year)
+current_date_month_year =commonFunctions.monthCorrespondances.get("0"+str(current_date.month))+" "+ str(current_date.year)
+
+
 
 # création du data frame
 
@@ -66,14 +66,15 @@ date_text = driver.find_element(by = "xpath", value = "//h2[@class='uitk-date-pi
 button_list = driver.find_elements(by="xpath", value="//button[@class='uitk-button uitk-button-medium uitk-button-only-icon uitk-layout-flex-item uitk-button-paging']")
 
 
-while date_text != month_year:
+while date_text != current_date_month_year:
     button_list[0].click()
     date_text = driver.find_element(by="xpath", value = "//h2[@class='uitk-date-picker-month-name uitk-type-medium']").text
+    print(date_text)
 
-while date_text != date_month:
+while date_text != date_month_year:
     button_list[1].click()
     date_text = driver.find_element(by="xpath", value = "//h2[@class='uitk-date-picker-month-name uitk-type-medium']").text
-
+    print(date_text)
 
 select_date = driver.find_element(by = "xpath", value="//button[@data-day='11']").click()
 
@@ -92,54 +93,68 @@ time.sleep(15)
 
 more1 = driver.find_element(by = "xpath", value = "//button[@data-stid='show-more-results']")
 driver.execute_script("arguments[0].click();", more1)
+time.sleep(10)
 more2 = driver.find_element(by = "xpath", value = "//button[@data-stid='show-more-results']")
 driver.execute_script("arguments[0].click();", more2)
+time.sleep(10)
 more3 = driver.find_element(by = "xpath", value = "//button[@data-stid='show-more-results']")
 driver.execute_script("arguments[0].click();", more3)
+time.sleep(10)
 more4 = driver.find_element(by = "xpath", value = "//button[@data-stid='show-more-results']")
 driver.execute_script("arguments[0].click();", more4)
+time.sleep(10)
 more5 = driver.find_element(by = "xpath", value = "//button[@data-stid='show-more-results']")
 driver.execute_script("arguments[0].click();", more5)
-for i in range(10):
+time.sleep(10)
+for i in range(20):
     driver.find_element(by = "css selector", value = "body").send_keys(Keys.PAGE_DOWN)
 
     
-link_list = driver.find_elements(by = "xpath", value="//a[@class = 'listing__link uitk-card-link']")
+
+link_list = driver.find_elements(by="xpath", value="//a[@class = 'listing__link uitk-card-link']")
 
 
 prices = list(map(lambda price: price.text, driver.find_elements(by="xpath", value="//div[contains(@class, 'uitk-text uitk-type-600 uitk-type-bold uitk-text-emphasis-theme')]")))
-print(prices)
 print(len(prices))
 
-grade = list(map(lambda note: note.text, driver.find_elements(by="xpath", value="//span[contains(@class, 'uitk-type-300 uitk-type-bold all-r-padding-one')]")))
-print(grade)
-print(len(grade))
+#grade = list(map(lambda note: note.text, driver.find_elements(by="xpath", value="//span[contains(@class, 'uitk-type-300 uitk-type-bold all-r-padding-one')]")))
+#print(grade)
+#print(len(grade))
 
 name = list(map(lambda hotel: hotel.text, driver.find_elements(by="xpath", value="//h3[contains(@class, 'uitk-heading-5 truncate-lines-2 all-b-padding-half pwa-theme--grey-900 uitk-type-heading-500')]")))
-print(name)
 print(len(name))
 
 links = list(map(lambda hotel_link: hotel_link.get_attribute("href"), driver.find_elements(by="xpath", value="//a[contains(@class, 'listing__link uitk-card-link')]")))
-print(links)
 print(len(links))
 
 address = []
 stars = []
 localisation = []
+grade = []
 
 for link in link_list:
+    print(link_list.index(link))
+
     driver.execute_script("arguments[0].click();", link)
     time.sleep(10)
 
 # Changer de fenêtre
     
     driver.switch_to.window(driver.window_handles[1])
-    time.sleep(15)
+    time.sleep(20)
 
 # Scrap name, address, stars
 
     address_hotel = driver.find_element(by = "xpath",value = "//div[@class='uitk-text uitk-type-300 uitk-layout-flex-item uitk-layout-flex-item-flex-basis-full_width uitk-text-default-theme']").text
-    
+
+    grade_text = driver.find_element(by = "xpath", value = "//h3[@class='uitk-heading-5 uitk-spacing uitk-spacing-padding-blockend-three']").text
+    grades_extraction = re.search('([0-9]+),([0-9]+)', grade_text)
+    if grades_extraction == None:
+        grades = None
+    else:
+        grades= grades_extraction.group(0)
+
+
     locator = Nominatim(user_agent='myGeocoder')
     location = locator.geocode(address_hotel)
 
@@ -152,6 +167,7 @@ for link in link_list:
 
 # ajout aux listes
 
+    grade.append(grades)
     address.append(address_hotel)
     stars.append(stars_hotel)
     if location == None :
@@ -163,6 +179,12 @@ for link in link_list:
     
     driver.close()
     driver.switch_to.window(driver.window_handles[0])
+    time.sleep(5)
+
+print(len(grade))
+print(len(stars))
+print(len(address))
+print(len(localisation))
 
 for i in range(len(name)):
     df_ligne= pd.DataFrame({'hotel_name': name[i],'note' : grade[i], 'stars': stars[i], 'price': prices[i], 'address' : address[i], 'localisation': localisation[i],'link':links[i]})
@@ -170,9 +192,10 @@ for i in range(len(name)):
 
 # création du CSV
 
-df.to_csv("hotelsCom.csv")
+name_csv = "hotelsCom_" + date + ".csv"
+df.to_csv(name_csv)
 
-"""""
+""""
 # création de la carte
 
 df_carte = pd.read_csv("hotelsCom.csv")
