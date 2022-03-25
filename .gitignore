@@ -1,5 +1,7 @@
 **/*.log
 **/.idea
-/__pycache__
+./__pycache__
 **/__pycache__
 **/__pycache__/**
+./node_module
+**/node_module

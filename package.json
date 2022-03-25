@@ -1,0 +1,14 @@
+{
+  "name": "HotelScraping",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "repository": "https://github.com/clementreiffers/HotelScraping",
+  "author": "clementreiffers <reiffersclement@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "fs-extra": "^10.0.1",
+    "ramda": "^0.28.0"
+  }
+}
