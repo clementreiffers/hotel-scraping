@@ -97,7 +97,6 @@ def get_links():
 def get_grades():
     grades = []
     cards = get_cards()
-    print(len(cards))
     for card in cards:
         try:
             grade = card.find_element(by="xpath", value="./*//div[contains(@class, '_9c5f726ff bd528f9ea6')]")
@@ -113,14 +112,14 @@ def get_prices():
                     driver.find_elements(by="xpath", value="//span[contains(@class, 'fde444d7ef _e885fdc12')]")))
 
 
-def get_addr():
+def get_addresses():
     return list(map(lambda address: address.text if address is not None else np.nan,
                     driver.find_elements(by="xpath", value="//span[contains(@data-testid, 'address')]")))
 
 
 def get_gps():
     return list(
-        map(lambda address: cf.getLocalisationFromAdd(address) if address is not None else np.nan, get_addr()))
+        map(lambda address: cf.getLocalisationFromAdd(address) if address is not None else np.nan, get_addresses()))
 
 
 def get_cards():
@@ -139,7 +138,7 @@ def get_stars():
 def get_hotels():
     time.sleep(2)
 
-    return [get_names(), get_grades(), get_stars(), get_prices(), get_addr(), get_gps(), get_links()]
+    return [get_names(), get_grades(), get_stars(), get_prices(), get_addresses(), get_gps(), get_links()]
 
 
 def applyFamilyAndDate():
@@ -210,6 +209,14 @@ def set_family_and_room(nbr_adults, nbr_children, nbr_room, ages_of_children):
             .click()
 
 
+def get_current_page():
+    return int(driver.find_element(by="xpath", value="//li[contains(@class, 'ce83a38554 f38c6bbd53')]").text)
+
+
+def get_last_page():
+    return int(driver.find_elements(by="xpath", value="//li[contains(@class, 'ce83a38554')]")[-1].text)
+
+
 def main(infos, filename):
     """
     :param filename: example.csv
@@ -230,19 +237,29 @@ def main(infos, filename):
     set_date(start_date, end_date)
     applyFamilyAndDate()
 
-    cf.createCsv(["name", "grade", "star", "price", "address", "localisation", "link"], 'bookingCom.csv')
+    current_page = get_current_page()
+    last_page = get_last_page()
 
-    while True:
-        try:
-            cf.appendToCsv(get_hotels(), filename)
-            changePage()
-        except:
-            driver.refresh()
-            time.sleep(5)
+    while current_page < last_page:
+        time.sleep(3)
+        # try:
+        cf.addRows(
+            names=get_names(),
+            stars=get_stars(),
+            gps=get_gps(),
+            addresses=get_addresses(),
+            links=get_links(),
+            grades=get_grades(),
+            filename=filename,
+            is_head=current_page == 1)
+        changePage()
+        current_page += 1
 
+    # except:
+
+
+    #     driver.refresh()
+    driver.close()
 
 if __name__ == '__main__':
     main(["paris", "20/05/2022", "23/05/2022", 2, 2, 2, [5, 6]], "bookingCom.csv")
-    driver.get(
-        "https://www.booking.com/index.fr.html?label=gen173nr-1BCAEoggI46AdIM1gEaE2IAQGYAQ24ARfIAQzYAQHoAQGIAgGoAgO4Arf4yJEGwAIB0gIkNmMwYWYwNGUtNGY3Ni00ZTk3LThjOGUtZWQ0OTEwMDZkZGMw2AIF4AIB;sid=4870985d274b91999c83d2a5d6f77393;keep_landing=1&sb_price_type=total&")
-    driver.close()
