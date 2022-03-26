@@ -1,7 +1,7 @@
 {
   "name": "HotelScraping",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "getJson.js",
   "type": "module",
   "repository": "https://github.com/clementreiffers/HotelScraping",
   "author": "clementreiffers <reiffersclement@gmail.com>",
