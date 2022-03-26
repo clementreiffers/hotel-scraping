@@ -3,7 +3,7 @@ import * as fs from "fs";
 
 const splitData_ = R.pipe(
     R.split("\n"),
-    R.map(R.split(","))
+    R.map(R.split(";"))
 );
 
 const transformDataToJsonLike_ = R.applySpec({
