@@ -242,7 +242,6 @@ def main(infos, filename):
 
     while current_page < last_page:
         time.sleep(3)
-        # try:
         cf.addRows(
             names=get_names(),
             stars=get_stars(),
@@ -255,10 +254,6 @@ def main(infos, filename):
         changePage()
         current_page += 1
 
-    # except:
-
-
-    #     driver.refresh()
     driver.close()
 
 if __name__ == '__main__':
