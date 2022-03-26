@@ -8,10 +8,10 @@ const splitData_ = R.pipe(
 
 const transformDataToJsonLike_ = R.applySpec({
     name: R.head,
-    stars: R.slice(1, 2),
-    grade: R.slice(2, 3),
-    price: R.slice(3, 4),
-    localisation: R.slice(4, 5),
+    grade: R.slice(1, 2),
+    stars: R.slice(2, 3),
+    address: R.slice(3, 4),
+    gps: R.slice(4, 5),
     link: R.last
 })
 
