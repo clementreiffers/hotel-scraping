@@ -1,6 +1,7 @@
 import csv
 import numpy as np
 from geopy.geocoders import Nominatim
+import pandas as pd
 
 # maybe create an english for certain cases
 monthCorrespondances = {
@@ -33,39 +34,32 @@ month_digits_dictionary = {
     "December": "12",
 }
 
-def addRows(infos, file, is_head=False):
+
+def addRows(names, stars, grades, gps, addresses, links, filename, is_head):
     """
-    :param infos: all infos you want to put in
-    :param file: File object you want to write in
-    :param is_head: True if you just want to put 1 line
+    :param is_head: put True if you want to erase the existing file, False to append
+    :param filename: the name of the file
+    :param links: all links you get from the website
+    :param addresses: all addresses you get from the website
+    :param gps: all gps you get from the website
+    :param grades: all grades you get from the website
+    :param stars: all stars you get from the website
+    :param names: all names you get from the website
+
     :return: None
     """
-    if is_head:
-        csv.writer(file).writerow(infos)
-    else:
-        for j in range(len(infos[0])):
-            csv.writer(file).writerow([infos[i][j] for i in range(len(infos))])
-    file.close()
+    df = pd.DataFrame(
+        {
+            "name": names,
+            "grade": grades,
+            "stars": stars,
+            "address": addresses,
+            "gps": gps,
+            "link": links,
+        }
+    )
 
-
-def createCsv(infos, file):
-    """
-    :param infos: send the head of the csv ex : ["name", "grade", "price", "localisation", "link"]
-    :param file: the name of the file you want to create ex: "test.csv"
-    :return: None
-    """
-    f = open(file, 'w')
-    addRows(infos, f, True)
-
-
-def appendToCsv(infos, file):
-    """
-    :param infos: [[allNames], [allGrades],[allPrices], [allLocalisations], [allLinks]]
-    :param file: name of the csv ex : "file.csv"
-    :return: None
-    """
-    f = open(file, "a")
-    addRows(infos, f)
+    df.to_csv(filename, index=False, mode="w" if is_head else "a", sep=";")
 
 
 def getLocalisationFromAdd(add):
