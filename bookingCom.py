@@ -257,9 +257,9 @@ def main(infos, filename):
 
     # except:
 
-
     #     driver.refresh()
     driver.close()
+
 
 if __name__ == '__main__':
     main(["paris", "20/05/2022", "23/05/2022", 2, 2, 2, [5, 6]], "bookingCom.csv")

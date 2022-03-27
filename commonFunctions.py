@@ -82,3 +82,8 @@ def separateDate(date):
     day, month, year = date.split("/")
     month = monthCorrespondances[month]
     return day, month, year
+
+
+def date_format_eu_to_us(date):
+    date = list(reversed(date.split('-')))
+    return date[0] + '-' + date[1] + '-' + date[2]
