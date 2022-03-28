@@ -106,6 +106,7 @@ def get_hotels(file_name):
         names=get_hotels_name(),
         stars=get_hotels_stars(),
         gps=get_hotels_gps(locations_list),
+        prices=get_hotels_price(),
         addresses=locations_list,
         links=get_hotels_link(),
         grades=get_hotels_grade(),
@@ -118,7 +119,7 @@ def get_hotels(file_name):
 def click_all_localisation_buttons():
     addresses_buttons = driver.find_elements(by="xpath", value="//button[@data-testid='distance-label-section']")
     for addressButton in addresses_buttons:
-        time.sleep(0.5)
+        time.sleep(1)
         addressButton.click()
     show_hotels_policies_buttons = driver \
         .find_elements(by="xpath", value="//button[@data-testid='hotel-policies-show-more']")

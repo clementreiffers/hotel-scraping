@@ -246,6 +246,7 @@ def main(infos, filename):
         cf.addRows(
             names=get_names(),
             stars=get_stars(),
+            prices=get_prices(),
             gps=get_gps(),
             addresses=get_addresses(),
             links=get_links(),
