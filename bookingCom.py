@@ -12,8 +12,16 @@ class NbrChildrenNotEqualToLenAgesOfChildren(ValueError):
     def __str__(self):
         return "the number of children must be equal to the length of the array of their ages"
 
-class Booking:
 
+class NotTheCorrectTypeForAgesOfChildren(ValueError):
+    def __init__(self):
+        super(NotTheCorrectTypeForAgesOfChildren, self).__init__()
+
+    def __str__(self):
+        return "ages of children must be an array"
+
+
+class Booking:
 
     def __init__(self, city, filename, start_date,
                  end_date, nbr_adults=None,
@@ -37,6 +45,8 @@ class Booking:
         self.driver = webdriver.Firefox()
         self.city = city
         self.filename = filename
+        if self.ages_of_children is not list:
+            raise NotTheCorrectTypeForAgesOfChildren()
         if len(self.ages_of_children) != self.nbr_children:
             raise NbrChildrenNotEqualToLenAgesOfChildren()
 
@@ -279,6 +289,6 @@ if __name__ == '__main__':
                    nbr_adults=2,
                    nbr_children=2,
                    nbr_room=2,
-                   ages_of_children=[5, 6],
+                   ages_of_children=5,
                    filename="bookingCom.csv")
     book.main()
