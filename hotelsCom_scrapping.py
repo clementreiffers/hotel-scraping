@@ -149,7 +149,7 @@ address = []
 stars = []
 localisation = []
 grade = []
-
+print(len(name))
 for link in link_list:
     print(link_list.index(link))
 
@@ -197,7 +197,7 @@ localisation = list(
 
 
 df = pd.DataFrame(list(zip(name, grade, stars, prices, address, localisation, links)),
-                  columns=['name', 'grade','stars', 'prices','address', 'gps', 'link'])
+                  columns=['name', 'grade','stars', 'prices','address', 'gps', 'date', 'nb_personne', 'link' ])
 
 # création du CSV
 
