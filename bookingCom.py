@@ -42,13 +42,16 @@ class Booking:
         self.nbr_children = nbr_children
         self.ages_of_children = ages_of_children
         self.nbr_room = nbr_room
-        self.driver = webdriver.Firefox()
         self.city = city
         self.filename = filename
-        if self.ages_of_children is not list:
+
+        if type(ages_of_children) is not list:
             raise NotTheCorrectTypeForAgesOfChildren()
+
         if len(self.ages_of_children) != self.nbr_children:
             raise NbrChildrenNotEqualToLenAgesOfChildren()
+
+        self.driver = webdriver.Firefox()
 
     def search_city(self, city):
         time.sleep(2)
@@ -289,6 +292,6 @@ if __name__ == '__main__':
                    nbr_adults=2,
                    nbr_children=2,
                    nbr_room=2,
-                   ages_of_children=5,
+                   ages_of_children=[5, 9],
                    filename="bookingCom.csv")
     book.main()

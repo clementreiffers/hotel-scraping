@@ -35,7 +35,7 @@ def write_city(city):
 
 
 def select_date(date_chosen):
-    date_chosen = date_format_eu_to_us(date_chosen)
+    date_chosen = cf.date_format_eu_to_us(date_chosen)
     time.sleep(2)
     try:
         driver.find_element(by="xpath", value="//time[@datetime='" + date_chosen + "']") \
@@ -56,11 +56,6 @@ def select_date(date_chosen):
         driver.find_element(by="xpath", value="//time[@datetime='" + date_chosen + "']") \
             .find_element(by="xpath", value="..") \
             .click()
-
-
-def date_format_eu_to_us(date):
-    date = list(reversed(date.split('-')))
-    return date[0] + '-' + date[1] + '-' + date[2]
 
 
 def select_ghests(adults_number, children_number, rooms_number):
@@ -87,10 +82,13 @@ def copy_hotels_to_csv_loop(file_name):
     driver.find_element(by="xpath",
                         value="//button[@data-testid='switch-view-button-desktop']").click()  # Click map cross
     time.sleep(2)
-    cf.createCsv(["name", "grade", "stars", "price", "location", "gps", "link"], file_name)
+    # cf.createCsv(["name", "grade", "stars", "price", "location", "gps", "link"], file_name)
     next_page_button_present = True
     while next_page_button_present:
-        cf.appendToCsv(get_hotels(), file_name)
+
+        get_hotels(file_name)
+        # cf.appendToCsv(get_hotels(), file_name)
+
         print("Hotels data have been written")
         try:
             driver.find_element(by="xpath", value="//button[@data-testid='next-result-page']").click()
@@ -100,12 +98,22 @@ def copy_hotels_to_csv_loop(file_name):
             next_page_button_present = False
 
 
-def get_hotels():
+def get_hotels(file_name):
     time.sleep(4)
     click_all_localisation_buttons()
     locations_list = get_hotels_location()
-    return [get_hotels_name(), get_hotels_grade(), get_hotels_stars(), locations_list, get_hotels_gps(locations_list),
-            get_hotels_link()]
+    cf.addRows(
+        names=get_hotels_name(),
+        stars=get_hotels_stars(),
+        gps=get_hotels_gps(locations_list),
+        prices=get_hotels_price(),
+        addresses=locations_list,
+        links=get_hotels_link(),
+        grades=get_hotels_grade(),
+        filename=file_name,
+        is_head=int(get_current_page()) == 1)
+    # return [get_hotels_name(), get_hotels_grade(), get_hotels_stars(), locations_list, get_hotels_gps(locations_list),
+    #         get_hotels_link()]
 
 
 def click_all_localisation_buttons():
@@ -162,6 +170,10 @@ def get_hotels_stars():
         except:
             stars_hotels_list.append(np.nan)
     return stars_hotels_list
+
+
+def get_current_page():
+    return driver.find_element(by="xpath", value="//button[@aria-current='page']").text
 
 
 if __name__ == '__main__':

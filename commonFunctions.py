@@ -35,7 +35,7 @@ month_digits_dictionary = {
 }
 
 
-def addRows(names, stars, grades, gps, addresses, links, filename, is_head):
+def addRows(names, stars, prices, grades, gps, addresses, links, filename, is_head):
     """
     :param is_head: put True if you want to erase the existing file, False to append
     :param filename: the name of the file
@@ -53,6 +53,7 @@ def addRows(names, stars, grades, gps, addresses, links, filename, is_head):
             "name": names,
             "grade": grades,
             "stars": stars,
+            "prices": prices,
             "address": addresses,
             "gps": gps,
             "link": links,
@@ -82,3 +83,8 @@ def separateDate(date):
     day, month, year = date.split("/")
     month = monthCorrespondances[month]
     return day, month, year
+
+
+def date_format_eu_to_us(date):
+    date = list(reversed(date.split('-')))
+    return date[0] + '-' + date[1] + '-' + date[2]
