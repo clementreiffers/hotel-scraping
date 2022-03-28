@@ -37,6 +37,7 @@ month_digits_dictionary = {
 
 def addRows(names, stars, prices, grades, gps, addresses, links, filename, is_head):
     """
+    :param prices: all prices you get from the website
     :param is_head: put True if you want to erase the existing file, False to append
     :param filename: the name of the file
     :param links: all links you get from the website
