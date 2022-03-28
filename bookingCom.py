@@ -5,33 +5,56 @@ from selenium import webdriver
 import commonFunctions as cf
 
 
+class NbrChildrenNotEqualToLenAgesOfChildren(ValueError):
+    def __init__(self):
+        super(NbrChildrenNotEqualToLenAgesOfChildren, self).__init__()
+
+    def __str__(self):
+        return "the number of children must be equal to the length of the array of their ages"
+
 class Booking:
 
-    def __init__(self, infos, filename):
+
+    def __init__(self, city, filename, start_date,
+                 end_date, nbr_adults=None,
+                 nbr_children=None, ages_of_children=None, nbr_room=None):
+        """
+        :param city: string
+        :param filename: string
+        :param start_date: dd/MM/yyyy
+        :param end_date: dd/MM/yyyy
+        :param nbr_adults: int
+        :param nbr_children: int
+        :param ages_of_children: array with len equal to number of children
+        :param nbr_room: int
+        """
+        self.start_date = start_date
+        self.nbr_adults = nbr_adults
+        self.end_date = end_date
+        self.nbr_children = nbr_children
+        self.ages_of_children = ages_of_children
+        self.nbr_room = nbr_room
         self.driver = webdriver.Firefox()
-        self.city, self.start_date, self.end_date = infos[0], infos[1], infos[2]
-        self.nbr_adults, self.nbr_children, self.nbr_room, self.ages_of_children = infos[3], infos[4], infos[5], infos[6]
+        self.city = city
         self.filename = filename
+        if len(self.ages_of_children) != self.nbr_children:
+            raise NbrChildrenNotEqualToLenAgesOfChildren()
 
     def search_city(self, city):
         time.sleep(2)
         self.driver.find_element(by="id", value="ss").send_keys(city)
 
-
     def search(self):
         time.sleep(2)
         self.driver.find_element(by="class name", value="sb-searchbox__button ").click()
 
-
     def get_by_xpath(self, xpath):
         return self.driver.find_element(by="xpath",
-                                   value=xpath)
-
+                                        value=xpath)
 
     def accept_cookies(self):
         time.sleep(2)
         self.driver.find_element(by="id", value="onetrust-accept-btn-handler").click()
-
 
     def set_good_month_year(self, month, year):
         # we can choose the correct month but we need the calendar open
@@ -41,7 +64,8 @@ class Booking:
             xpath_calendar = "//div[contains(@aria-live, 'polite')]"
             current_date = self.get_by_xpath(xpath_calendar).text
             if len(current_date) == 0:
-                current_date = self.driver.find_element(by="xpath", value="//*[contains(@class, 'bui-calendar__wrapper')]")
+                current_date = self.driver.find_element(by="xpath",
+                                                        value="//*[contains(@class, 'bui-calendar__wrapper')]")
                 current_date = current_date.text.split(" ")[0:2]
                 current_date[1] = str(''.join(i for i in current_date[1] if i.isdigit()))
 
@@ -54,19 +78,17 @@ class Booking:
                     self.get_by_xpath(
                         "//*[local-name()='div' and contains(@class, 'bui-calendar__control bui-calendar__control--next')]").click()
 
-
     def show_calendar(self):
         try:
             self.driver.find_element(by="xpath", value="//div[contains(@class, 'sb-date-field__display')]").click()
         except:
-            self.driver.find_element(by="xpath", value="//button[contains(@data-testid, 'date-display-field-end')]").click()
-
+            self.driver.find_element(by="xpath",
+                                     value="//button[contains(@data-testid, 'date-display-field-end')]").click()
 
     def select_day(self, day):
         # permet de scroller quand on n'a pas le bon mois affiché
         xpathDay = "//span[contains(@aria-hidden, 'true') and contains(text(), '{}')]".format(day)
         self.get_by_xpath(xpathDay).click()
-
 
     def set_date(self, start_date, end_date):
         """
@@ -86,19 +108,16 @@ class Booking:
 
         self.select_day(end_day)
 
-
     def get_names_and_links_in_cards(self):
         return self.driver.find_elements(by="class name", value="fb01724e5b")
 
-
     def get_names(self):
         return list(
-            map(lambda hotel: hotel.text.split("\n")[0] if hotel is not None else np.nan, self.get_names_and_links_in_cards()))
-
+            map(lambda hotel: hotel.text.split("\n")[0] if hotel is not None else np.nan,
+                self.get_names_and_links_in_cards()))
 
     def get_links(self):
         return list(map(lambda hotel: hotel.get_attribute("href"), self.get_names_and_links_in_cards()))
-
 
     def get_grades(self):
         grades = []
@@ -112,25 +131,22 @@ class Booking:
 
         return grades
 
-
     def get_prices(self):
         return list(map(lambda price: price.text.split(" ")[1] if price is not None else np.nan,
-                        self.driver.find_elements(by="xpath", value="//span[contains(@class, 'fde444d7ef _e885fdc12')]")))
-
+                        self.driver.find_elements(by="xpath",
+                                                  value="//span[contains(@class, 'fde444d7ef _e885fdc12')]")))
 
     def get_addresses(self):
         return list(map(lambda address: address.text if address is not None else np.nan,
                         self.driver.find_elements(by="xpath", value="//span[contains(@data-testid, 'address')]")))
 
-
     def get_gps(self):
         return list(
-            map(lambda address: cf.getLocalisationFromAdd(address) if address is not None else np.nan, self.get_addresses()))
-
+            map(lambda address: cf.getLocalisationFromAdd(address) if address is not None else np.nan,
+                self.get_addresses()))
 
     def get_cards(self):
         return self.driver.find_elements(by="xpath", value="//div[contains(@class, '_7192d3184')]")
-
 
     def get_stars(self):
         stars = []
@@ -139,7 +155,6 @@ class Booking:
             stars.append(len(nbr_stars) if nbr_stars else np.nan)
 
         return stars
-
 
     def get_hotels(self):
         time.sleep(2)
@@ -152,35 +167,29 @@ class Booking:
                 self.get_gps(),
                 self.get_links()]
 
-
     def applyFamilyAndDate(self):
         try:
             self.driver.find_element(by="xpath", value="//button[contains(@class, 'sb-searchbox__button')]").click()
         except:
             self.driver.find_element(by="xpath", value="//button[contains(@type, 'submit')]").click()
 
-
     def changePage(self):
         time.sleep(2)
         self.driver.find_element(by="xpath", value="//button[contains(@aria-label, 'Page suivante')]").click()
 
-
     def get_current_nbr_adults_children_rooms(self):
         return list(map(lambda nbr: int(nbr.text),
-                        self.driver.find_elements(by="xpath", value="//span[contains(@class, 'bui-stepper__display')]")))
-
+                        self.driver.find_elements(by="xpath",
+                                                  value="//span[contains(@class, 'bui-stepper__display')]")))
 
     def get_nbr_adults(self):
         return self.get_current_nbr_adults_children_rooms()[0]
 
-
     def get_nbr_children(self):
         return self.get_current_nbr_adults_children_rooms()[1]
 
-
     def get_nbr_rooms(self):
         return self.get_current_nbr_adults_children_rooms()[2]
-
 
     def set_nbr(self, btn, current_nbr, nbr_wanted):
         """
@@ -192,7 +201,6 @@ class Booking:
         while current_nbr() < nbr_wanted:
             time.sleep(0.5)
             btn.click()
-
 
     def set_family_and_room(self, nbr_adults, nbr_children, nbr_room, ages_of_children):
         """
@@ -206,7 +214,7 @@ class Booking:
         self.driver.find_element(by="id", value="xp__guests__toggle").click()
 
         btn_adults, btn_children, btn_room = self.driver.find_elements(by="xpath",
-                                                                  value="//button[contains(@class, 'bui-button bui-button--secondary bui-stepper__add-button')]")
+                                                                       value="//button[contains(@class, 'bui-button bui-button--secondary bui-stepper__add-button')]")
 
         self.set_nbr(btn_adults, self.get_nbr_adults, nbr_adults)
 
@@ -220,14 +228,11 @@ class Booking:
             selects[i].find_element(by="xpath", value="./option[contains(@value, '{}')]".format(ages_of_children[i])) \
                 .click()
 
-
     def get_current_page(self):
         return int(self.driver.find_element(by="xpath", value="//li[contains(@class, 'ce83a38554 f38c6bbd53')]").text)
 
-
     def get_last_page(self):
         return int(self.driver.find_elements(by="xpath", value="//li[contains(@class, 'ce83a38554')]")[-1].text)
-
 
     def main(self):
         """
@@ -266,6 +271,14 @@ class Booking:
 
         self.driver.close()
 
+
 if __name__ == '__main__':
-    book = Booking(["paris", "20/05/2022", "23/05/2022", 2, 2, 2, [5, 6]], "bookingCom.csv")
+    book = Booking(city="paris",
+                   start_date="20/05/2022",
+                   end_date="23/05/2022",
+                   nbr_adults=2,
+                   nbr_children=2,
+                   nbr_room=2,
+                   ages_of_children=[5, 6],
+                   filename="bookingCom.csv")
     book.main()
