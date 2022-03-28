@@ -29,8 +29,8 @@ class Booking:
         """
         :param city: string
         :param filename: string
-        :param start_date: dd/MM/yyyy
-        :param end_date: dd/MM/yyyy
+        :param start_date: MM-dd-yyyy
+        :param end_date: MM-dd-yyyy
         :param nbr_adults: int
         :param nbr_children: int
         :param ages_of_children: array with len equal to number of children
@@ -105,11 +105,14 @@ class Booking:
 
     def set_date(self, start_date, end_date):
         """
-        :param end_date:
-        :param start_date:
+        :param end_date: MM-dd-yyyy
+        :param start_date: MM-dd-yyyy
         """
-        start_day, start_month, start_year = cf.separateDate(start_date)
-        end_day, end_month, end_year = cf.separateDate(end_date)
+        start_day, start_month, start_year = cf.separateAmericanDate(start_date)
+        end_day, end_month, end_year = cf.separateAmericanDate(end_date)
+
+        start_month = cf.monthCorrespondances[start_month]
+        end_month = cf.monthCorrespondances[end_month]
 
         self.set_good_month_year(start_month, start_year)
 
@@ -248,12 +251,6 @@ class Booking:
         return int(self.driver.find_elements(by="xpath", value="//li[contains(@class, 'ce83a38554')]")[-1].text)
 
     def main(self):
-        """
-        :param filename: example.csv
-        :param infos: [city, start_date, end_date, nbr_adults, nbr_children, nbr_room, [age_children] ]
-        :return:
-        """
-
         self.driver.get(
             "https://www.booking.com/index.fr.html?label=gen173nr-1BCAEoggI46AdIM1gEaE2IAQGYAQ24ARfIAQzYAQHoAQGIAgGoAgO4Arf4yJEGwAIB0gIkNmMwYWYwNGUtNGY3Ni00ZTk3LThjOGUtZWQ0OTEwMDZkZGMw2AIF4AIB;sid=4870985d274b91999c83d2a5d6f77393;keep_landing=1&sb_price_type=total&")
         self.accept_cookies()
@@ -287,8 +284,8 @@ class Booking:
 
 if __name__ == '__main__':
     book = Booking(city="paris",
-                   start_date="20/05/2022",
-                   end_date="23/05/2022",
+                   start_date="05-20-2022",
+                   end_date="05-23-2022",
                    nbr_adults=2,
                    nbr_children=2,
                    nbr_room=2,
