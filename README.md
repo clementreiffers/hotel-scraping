@@ -58,9 +58,9 @@ csv : nom, note, etoile, prix, adresse, gps, lien
 (mettez les noms d'entetes du csv en anglais, singulier)
 fonction à mettre en commun : 
 - getLocalisationFromAdd
-- createCsv
-- appendToCsv
+- addRows
 - separateDate 
-
+- separateAmericanDate
+- date_format_eu_to_us
 
 
