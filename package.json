@@ -9,6 +9,8 @@
   "dependencies": {
     "fs": "^0.0.1-security",
     "fs-extra": "^10.0.1",
+    "gulp": "^4.0.2",
+    "gulp-cli": "^2.3.0",
     "ramda": "^0.28.0"
   }
 }

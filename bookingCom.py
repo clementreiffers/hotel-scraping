@@ -270,6 +270,7 @@ class Booking:
             cf.addRows(
                 names=self.get_names(),
                 stars=self.get_stars(),
+                prices=self.get_prices(),
                 gps=self.get_gps(),
                 addresses=self.get_addresses(),
                 links=self.get_links(),
