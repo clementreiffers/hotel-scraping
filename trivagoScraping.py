@@ -88,7 +88,7 @@ def copy_hotels_to_csv_loop(file_name):
 
         get_hotels(file_name)
         # cf.appendToCsv(get_hotels(), file_name)
-
+        scroll_page()
         print("Hotels data have been written")
         try:
             driver.find_element(by="xpath", value="//button[@data-testid='next-result-page']").click()
@@ -125,6 +125,11 @@ def click_all_localisation_buttons():
     for showHotelPoliciesButton in show_hotels_policies_buttons:
         time.sleep(0.5)
         showHotelPoliciesButton.click()
+
+
+def scroll_page():
+    driver.find_element(by="css selector", value="body").send_keys(Keys.CONTROL, Keys.END)
+    time.sleep(2)
 
 
 def get_hotels_name():
