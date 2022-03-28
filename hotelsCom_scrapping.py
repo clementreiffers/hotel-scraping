@@ -35,10 +35,10 @@ nb_adulte = "2"
 nb_enfant = "0"
 
 date_day, date_month, date_year = commonFunctions.separateDate(date)
-date_month_year = str(date_month) +" "+ str(date_year)
+date_month_year = str(date_month) + " " + str(date_year)
 
-current_date_month_year =commonFunctions.monthCorrespondances.get("0"+str(current_date.month))+" "+ str(current_date.year)
-
+current_date_month_year = commonFunctions.monthCorrespondances.get("0" + str(current_date.month)) + " " + str(
+    current_date.year)
 
 # ouverture de la page
 driver = webdriver.Firefox()
@@ -46,46 +46,49 @@ driver.get("https://fr.hotels.com/")
 time.sleep(5)
 
 # acceptation des cookies
-driver.find_element(by = "xpath" , value = "//button[@class='osano-cm-accept-all osano-cm-buttons__button osano-cm-button osano-cm-button--type_accept']").click()
+driver.find_element(by="xpath",
+                    value="//button[@class='osano-cm-accept-all osano-cm-buttons__button osano-cm-button osano-cm-button--type_accept']").click()
 time.sleep(5)
 
 # configuration de la recherche
 
-driver.find_element(by = "xpath", value = "//div[@class='uitk-field has-floatedLabel-label has-no-placeholder']").click()
+driver.find_element(by="xpath", value="//div[@class='uitk-field has-floatedLabel-label has-no-placeholder']").click()
 
 time.sleep(5)
-search_dest = driver.find_element(by = "id", value="location-field-destination")
+search_dest = driver.find_element(by="id", value="location-field-destination")
 dest = search_dest.send_keys(city, Keys.ENTER)
 time.sleep(5)
 
-
-driver.find_element(by = "id", value = "d1-btn").click()
+driver.find_element(by="id", value="d1-btn").click()
 time.sleep(2)
 
-date_text = driver.find_element(by = "xpath", value = "//h2[@class='uitk-date-picker-month-name uitk-type-medium']").text
-button_list = driver.find_elements(by="xpath", value="//button[@class='uitk-button uitk-button-medium uitk-button-only-icon uitk-layout-flex-item uitk-button-paging']")
-
+date_text = driver.find_element(by="xpath", value="//h2[@class='uitk-date-picker-month-name uitk-type-medium']").text
+button_list = driver.find_elements(by="xpath",
+                                   value="//button[@class='uitk-button uitk-button-medium uitk-button-only-icon uitk-layout-flex-item uitk-button-paging']")
 
 while date_text != current_date_month_year:
     button_list[0].click()
-    date_text = driver.find_element(by="xpath", value = "//h2[@class='uitk-date-picker-month-name uitk-type-medium']").text
+    date_text = driver.find_element(by="xpath",
+                                    value="//h2[@class='uitk-date-picker-month-name uitk-type-medium']").text
     print(date_text)
 
 while date_text != date_month_year:
     button_list[1].click()
-    date_text = driver.find_element(by="xpath", value = "//h2[@class='uitk-date-picker-month-name uitk-type-medium']").text
+    date_text = driver.find_element(by="xpath",
+                                    value="//h2[@class='uitk-date-picker-month-name uitk-type-medium']").text
     print(date_text)
 
-select_date = driver.find_element(by = "xpath", value="//button[@data-day='11']").click()
+select_date = driver.find_element(by="xpath", value="//button[@data-day='11']").click()
 
-driver.find_element(by = "xpath", value = "//button[@class='uitk-button uitk-button-medium uitk-button-has-text uitk-button-primary uitk-layout-flex-item uitk-layout-flex-item-flex-shrink-0 dialog-done']").click()
+driver.find_element(by="xpath",
+                    value="//button[@class='uitk-button uitk-button-medium uitk-button-has-text uitk-button-primary uitk-layout-flex-item uitk-layout-flex-item-flex-shrink-0 dialog-done']").click()
 
-driver.find_element(by = "xpath", value = "//button[@aria-label='1 chambre, 2 pers.']").click()
+driver.find_element(by="xpath", value="//button[@aria-label='1 chambre, 2 pers.']").click()
 
-adulte = driver.find_element(by = "xpath", value = "//input[@id='adult-input-0']").get_attribute("value")
-enfant = driver.find_element(by = "xpath", value = "//input[@id='child-input-0']").get_attribute("value")
+adulte = driver.find_element(by="xpath", value="//input[@id='adult-input-0']").get_attribute("value")
+enfant = driver.find_element(by="xpath", value="//input[@id='child-input-0']").get_attribute("value")
 
-btn = driver.find_elements(by = "xpath", value = "//button[@class='uitk-layout-flex-item uitk-step-input-touch-target']")
+btn = driver.find_elements(by="xpath", value="//button[@class='uitk-layout-flex-item uitk-step-input-touch-target']")
 
 while adulte != "1":
     btn[0].click()
@@ -103,10 +106,12 @@ while enfant < nb_enfant:
     btn[4].click()
     enfant = driver.find_element(by="xpath", value="//input[@id='child-input-0']").get_attribute("value")
 
-select = driver.find_element(by = "xpath", value = "//button[@class='uitk-button uitk-button-large uitk-button-fullWidth uitk-button-has-text uitk-button-primary uitk-button-floating-full-width']").click()
+select = driver.find_element(by="xpath",
+                             value="//button[@class='uitk-button uitk-button-large uitk-button-fullWidth uitk-button-has-text uitk-button-primary uitk-button-floating-full-width']").click()
 
 # rechercher
-driver.find_element(by = "xpath", value="//button[@class='uitk-button uitk-button-large uitk-button-fullWidth uitk-button-has-text uitk-button-primary']").click()
+driver.find_element(by="xpath",
+                    value="//button[@class='uitk-button uitk-button-large uitk-button-fullWidth uitk-button-has-text uitk-button-primary']").click()
 time.sleep(15)
 
 # Scrap
@@ -119,26 +124,25 @@ while i < 10:
     time.sleep(3)
     i += 1
 
-
 for i in range(20):
-    driver.find_element(by = "css selector", value = "body").send_keys(Keys.PAGE_DOWN)
-
-    
+    driver.find_element(by="css selector", value="body").send_keys(Keys.PAGE_DOWN)
 
 link_list = driver.find_elements(by="xpath", value="//a[@class = 'listing__link uitk-card-link']")
 
-
-prices = list(map(lambda price: price.text, driver.find_elements(by="xpath", value="//div[contains(@class, 'uitk-text uitk-type-600 uitk-type-bold uitk-text-emphasis-theme')]")))
+prices = list(map(lambda price: price.text, driver.find_elements(by="xpath",
+                                                                 value="//div[contains(@class, 'uitk-text uitk-type-600 uitk-type-bold uitk-text-emphasis-theme')]")))
 print(len(prices))
 
-#grade = list(map(lambda note: note.text, driver.find_elements(by="xpath", value="//span[contains(@class, 'uitk-type-300 uitk-type-bold all-r-padding-one')]")))
-#print(grade)
-#print(len(grade))
+# grade = list(map(lambda note: note.text, driver.find_elements(by="xpath", value="//span[contains(@class, 'uitk-type-300 uitk-type-bold all-r-padding-one')]")))
+# print(grade)
+# print(len(grade))
 
-name = list(map(lambda hotel: hotel.text, driver.find_elements(by="xpath", value="//h3[contains(@class, 'uitk-heading-5 truncate-lines-2 all-b-padding-half pwa-theme--grey-900 uitk-type-heading-500')]")))
+name = list(map(lambda hotel: hotel.text, driver.find_elements(by="xpath",
+                                                               value="//h3[contains(@class, 'uitk-heading-5 truncate-lines-2 all-b-padding-half pwa-theme--grey-900 uitk-type-heading-500')]")))
 print(len(name))
 
-links = list(map(lambda hotel_link: hotel_link.get_attribute("href"), driver.find_elements(by="xpath", value="//a[contains(@class, 'listing__link uitk-card-link')]")))
+links = list(map(lambda hotel_link: hotel_link.get_attribute("href"),
+                 driver.find_elements(by="xpath", value="//a[contains(@class, 'listing__link uitk-card-link')]")))
 print(len(links))
 
 address = []
@@ -151,72 +155,50 @@ for link in link_list:
 
     driver.execute_script("arguments[0].click();", link)
 
-    driver.implicitly_wait(15)
+    driver.implicitly_wait(20)
 
-# Changer de fenêtre
-    
+    # Changer de fenêtre
+
     driver.switch_to.window(driver.window_handles[1])
 
-# Scrap name, address, stars
+    # Scrap name, address, stars
 
-    address_hotel = driver.find_element(by = "xpath",value = "//div[@class='uitk-text uitk-type-300 uitk-layout-flex-item uitk-layout-flex-item-flex-basis-full_width uitk-text-default-theme']").text
+    address_hotel = driver.find_element(by="xpath",
+                                        value="//div[@class='uitk-text uitk-type-300 uitk-layout-flex-item uitk-layout-flex-item-flex-basis-full_width uitk-text-default-theme']").text
 
-
-    grade_text = driver.find_element(by = "xpath", value = "//h3[@class='uitk-heading-5 uitk-spacing uitk-spacing-padding-blockend-three']").text
+    grade_text = driver.find_element(by="xpath",
+                                     value="//h3[@class='uitk-heading-5 uitk-spacing uitk-spacing-padding-blockend-three']").text
     grades_extraction = re.search('([0-9]+),([0-9]+)', grade_text)
     if grades_extraction == None:
         grades = None
     else:
-        grades= grades_extraction.group(0)
+        grades = grades_extraction.group(0)
 
-    span_list = driver.find_elements(by = "xpath", value = "//span[@class='is-visually-hidden']")
+    span_list = driver.find_elements(by="xpath", value="//span[@class='is-visually-hidden']")
     star_text = span_list[10].get_attribute("innerHTML")
     if len(star_text) > 30:
         stars_hotel = '0'
     else:
         stars_hotel = re.search('([0-9]+)\.([0-9]+)', star_text).group(0)
 
-# ajout aux listes
+    # ajout aux listes
 
     grade.append(grades)
     address.append(address_hotel)
     stars.append(stars_hotel)
 
-# on ferme l'onglet 
-    
+    # on ferme l'onglet
+
     driver.close()
     driver.switch_to.window(driver.window_handles[0])
 
-localisation = list(map(lambda add: commonFunctions.getLocalisationFromAdd(add) if address is not None else np.nan, address))
+localisation = list(
+    map(lambda add: commonFunctions.getLocalisationFromAdd(add) if address is not None else np.nan, address))
 
-print(len(grade))
-print(len(stars))
-print(len(address))
-print(len(localisation))
 
-df = pd.DataFrame(list(zip(name,grade,stars, prices,address,localisation, links)),columns=['hotel_name','note', 'stars', 'price', 'address', 'localisation','link'])
+df = pd.DataFrame(list(zip(name, grade, stars, prices, address, localisation, links)),
+                  columns=['name', 'stars', 'grade', 'price', 'address', 'localisation', 'link'])
 
 # création du CSV
 
-df.to_csv("hotelsCom1.csv")
-
-""""
-# création de la carte
-
-df_carte = pd.read_csv("hotelsCom.csv")
-
-
-carte = folium.Map([48.850928, 2.346260], zoom_start=100)
-
-
-z = df_carte['hotel_name']
-x = df_carte['latitude']
-y = df_carte['longitude']
-
-for i in range(len(x)):
-    folium.Marker([x[i],y[i]],popup=z[i]).add_to(carte)
-    
-carte.save('Carte_hotel.html')
-webbrowser.open("Carte_hotel.html")
-
-"""
+df.to_csv("hotelsCom.csv")
