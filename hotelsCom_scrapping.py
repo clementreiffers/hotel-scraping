@@ -70,13 +70,13 @@ while date_text != current_date_month_year:
     button_list[0].click()
     date_text = driver.find_element(by="xpath",
                                     value="//h2[@class='uitk-date-picker-month-name uitk-type-medium']").text
-    print(date_text)
+
 
 while date_text != date_month_year:
     button_list[1].click()
     date_text = driver.find_element(by="xpath",
                                     value="//h2[@class='uitk-date-picker-month-name uitk-type-medium']").text
-    print(date_text)
+
 
 select_date = driver.find_element(by="xpath", value="//button[@data-day='11']").click()
 
@@ -131,7 +131,7 @@ link_list = driver.find_elements(by="xpath", value="//a[@class = 'listing__link 
 
 prices = list(map(lambda price: price.text, driver.find_elements(by="xpath",
                                                                  value="//div[contains(@class, 'uitk-text uitk-type-600 uitk-type-bold uitk-text-emphasis-theme')]")))
-print(len(prices))
+
 
 # grade = list(map(lambda note: note.text, driver.find_elements(by="xpath", value="//span[contains(@class, 'uitk-type-300 uitk-type-bold all-r-padding-one')]")))
 # print(grade)
@@ -139,11 +139,11 @@ print(len(prices))
 
 name = list(map(lambda hotel: hotel.text, driver.find_elements(by="xpath",
                                                                value="//h3[contains(@class, 'uitk-heading-5 truncate-lines-2 all-b-padding-half pwa-theme--grey-900 uitk-type-heading-500')]")))
-print(len(name))
+
 
 links = list(map(lambda hotel_link: hotel_link.get_attribute("href"),
                  driver.find_elements(by="xpath", value="//a[contains(@class, 'listing__link uitk-card-link')]")))
-print(len(links))
+
 
 address = []
 stars = []
@@ -197,8 +197,8 @@ localisation = list(
 
 
 df = pd.DataFrame(list(zip(name, grade, stars, prices, address, localisation, links)),
-                  columns=['name', 'stars', 'grade', 'price', 'address', 'localisation', 'link'])
+                  columns=['name', 'grade','stars', 'prices','address', 'gps', 'link'])
 
 # création du CSV
 
-df.to_csv("hotelsCom.csv")
+df.to_csv("hotelsCom.csv",index = False, sep=";")
