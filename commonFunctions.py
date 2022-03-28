@@ -80,8 +80,15 @@ def separateDate(date):
     :param date: dd/MM/yyyy
     :return: day, month, year
     """
-    day, month, year = date.split("/")
-    month = monthCorrespondances[month]
+    return date.split("/")
+
+
+def separateAmericanDate(date):
+    """
+    :param date: MM-dd-yyyy
+    :return: day, month, year
+    """
+    month, day, year = date.split("-")
     return day, month, year
 
 
