@@ -1,10 +1,10 @@
 import pandas as pd
+from os import listdir
+from os.path import isfile, join
 
-df1 = pd.read_csv("bookingCom.csv", sep = ";")
-df2 = pd.read_csv("trivagoScraping.csv", sep = ";")
-df3 = pd.read_csv("hotelsCom.csv", sep = ";")
+liste = [f for f in listdir("csv") if isfile(join("csv", f))]
 
-df4 = pd.concat([df1,df2])
-df = pd.concat([df4,df3])
+dataFrame = pd.concat(
+   map(pd.read_csv, liste), ignore_index=True)
 
-df.to_csv("hotel_scrap.csv", index = False, sep = ";")
+dataFrame.to_csv("hotel_scrap.csv",sep=";")

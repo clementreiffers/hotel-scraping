@@ -15,29 +15,49 @@ Created on Wed Mar 16 21:57:06 2022
 import time
 import datetime
 import re
-import folium
-import webbrowser
 import pandas as pd
 import numpy as np
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from geopy.geocoders import Nominatim
-from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support.ui import Select
 
 import commonFunctions
+monthCorrespondances = {
+    "01": "janvier",
+    "02": "fevrier",
+    "03": "mars",
+    "04": "avril",
+    "05": "mai",
+    "06": "juin",
+    "07": "juillet",
+    "08": "août",
+    "09": "septembre",
+    "10": "octobre",
+    "11": "novembre",
+    "12": "décembre",
+}
+
+def separateDate(date):
+    """
+    :param date: dd/MM/yyyy
+    :return: day, month, year
+    """
+    day, month, year = date.split("/")
+    month = monthCorrespondances[month]
+    return day, month, year
 
 # éléments de recherche
 
 city = "Paris"
-date = "11/07/2022"
+date = "11/12/2022"
 current_date = datetime.date.today()
 nb_adulte = "2"
-nb_enfant = "0"
+nb_enfant = "2"
 
-date_day, date_month, date_year = commonFunctions.separateDate(date)
+date_day, date_month, date_year = separateDate(date)
 date_month_year = str(date_month) + " " + str(date_year)
 
-current_date_month_year = commonFunctions.monthCorrespondances.get("0" + str(current_date.month)) + " " + str(
+current_date_month_year = monthCorrespondances.get("0" + str(current_date.month)) + " " + str(
     current_date.year)
 
 # ouverture de la page
@@ -72,6 +92,7 @@ while date_text != current_date_month_year:
                                     value="//h2[@class='uitk-date-picker-month-name uitk-type-medium']").text
 
 
+
 while date_text != date_month_year:
     button_list[1].click()
     date_text = driver.find_element(by="xpath",
@@ -99,20 +120,29 @@ while adulte < nb_adulte:
     adulte = driver.find_element(by="xpath", value="//input[@id='adult-input-0']").get_attribute("value")
 
 while enfant != "0":
-    btn[3].click()
+    btn[2].click()
     enfant = driver.find_element(by="xpath", value="//input[@id='child-input-0']").get_attribute("value")
 
 while enfant < nb_enfant:
-    btn[4].click()
+    btn[3].click()
     enfant = driver.find_element(by="xpath", value="//input[@id='child-input-0']").get_attribute("value")
 
-select = driver.find_element(by="xpath",
+if nb_enfant == "2":
+    select_element = driver.find_element(by="id", value='child-age-input-0-0')
+    select_object = Select(select_element)
+    select_object.select_by_index(10)
+    select_element = driver.find_element(by="id", value='child-age-input-0-1')
+    select_object = Select(select_element)
+    select_object.select_by_index(5)
+
+driver.find_element(by="xpath",
                              value="//button[@class='uitk-button uitk-button-large uitk-button-fullWidth uitk-button-has-text uitk-button-primary uitk-button-floating-full-width']").click()
 
 # rechercher
 driver.find_element(by="xpath",
                     value="//button[@class='uitk-button uitk-button-large uitk-button-fullWidth uitk-button-has-text uitk-button-primary']").click()
 time.sleep(15)
+
 
 # Scrap
 
@@ -149,7 +179,11 @@ address = []
 stars = []
 localisation = []
 grade = []
+date = []
+nb_personne = []
+
 print(len(name))
+
 for link in link_list:
     print(link_list.index(link))
 
@@ -176,16 +210,19 @@ for link in link_list:
 
     span_list = driver.find_elements(by="xpath", value="//span[@class='is-visually-hidden']")
     star_text = span_list[10].get_attribute("innerHTML")
-    if len(star_text) > 30:
+    star = re.search('([0-9]+)\.([0-9]+)', star_text)
+    if star == None:
         stars_hotel = '0'
     else:
-        stars_hotel = re.search('([0-9]+)\.([0-9]+)', star_text).group(0)
+        stars_hotel = star.group(0)
 
     # ajout aux listes
 
     grade.append(grades)
     address.append(address_hotel)
     stars.append(stars_hotel)
+    date.append(date_month_year)
+    nb_personne.append(int(nb_adulte)+int(nb_enfant))
 
     # on ferme l'onglet
 
@@ -196,9 +233,9 @@ localisation = list(
     map(lambda add: commonFunctions.getLocalisationFromAdd(add) if address is not None else np.nan, address))
 
 
-df = pd.DataFrame(list(zip(name, grade, stars, prices, address, localisation, links)),
+df = pd.DataFrame(list(zip(name, grade, stars, prices, address, localisation, date, nb_personne, links)),
                   columns=['name', 'grade','stars', 'prices','address', 'gps', 'date', 'nb_personne', 'link' ])
 
 # création du CSV
 
-df.to_csv("hotelsCom.csv",index = False, sep=";")
+df.to_csv("csv/hotelsComDecembre4.csv",index = False, sep=";")
