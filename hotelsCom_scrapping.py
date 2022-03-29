@@ -24,7 +24,7 @@ from selenium.webdriver.support.ui import Select
 import commonFunctions
 monthCorrespondances = {
     "01": "janvier",
-    "02": "fevrier",
+    "02": "février",
     "03": "mars",
     "04": "avril",
     "05": "mai",
@@ -49,12 +49,12 @@ def separateDate(date):
 # éléments de recherche
 
 city = "Paris"
-date = "11/12/2022"
+date_set = "11/03/2023"
 current_date = datetime.date.today()
 nb_adulte = "2"
-nb_enfant = "2"
+nb_enfant = "0"
 
-date_day, date_month, date_year = separateDate(date)
+date_day, date_month, date_year = separateDate(date_set)
 date_month_year = str(date_month) + " " + str(date_year)
 
 current_date_month_year = monthCorrespondances.get("0" + str(current_date.month)) + " " + str(
@@ -221,7 +221,7 @@ for link in link_list:
     grade.append(grades)
     address.append(address_hotel)
     stars.append(stars_hotel)
-    date.append(date_month_year)
+    date.append(date_set)
     nb_personne.append(int(nb_adulte)+int(nb_enfant))
 
     # on ferme l'onglet
@@ -238,4 +238,4 @@ df = pd.DataFrame(list(zip(name, grade, stars, prices, address, localisation, da
 
 # création du CSV
 
-df.to_csv("csv/hotelsCom/hotelsComDecembre4.csv",index = False, sep=";")
+df.to_csv("csv/hotelsCom/hotelsComMars2.csv",index = False, sep=";")
