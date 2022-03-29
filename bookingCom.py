@@ -22,7 +22,6 @@ class NotTheCorrectTypeForAgesOfChildren(ValueError):
 
 
 class Booking:
-
     def __init__(self, city, filename, start_date,
                  end_date, nbr_adults=None,
                  nbr_children=None, ages_of_children=None, nbr_room=None):
@@ -44,7 +43,7 @@ class Booking:
         self.nbr_room = nbr_room
         self.city = city
         self.filename = filename
-        self.iCanWorkAlone = False
+        self.iCanWork = True
 
         if type(ages_of_children) is not list:
             raise NotTheCorrectTypeForAgesOfChildren()
@@ -53,6 +52,7 @@ class Booking:
             raise NbrChildrenNotEqualToLenAgesOfChildren()
 
         self.driver = webdriver.Firefox()
+        self.driver.delete_all_cookies()
 
     def search_city(self, city):
         time.sleep(2)
@@ -68,7 +68,10 @@ class Booking:
 
     def accept_cookies(self):
         time.sleep(2)
-        self.driver.find_element(by="id", value="onetrust-accept-btn-handler").click()
+        try:
+            self.driver.find_element(by="id", value="onetrust-accept-btn-handler").click()
+        except:
+            ...
 
     def set_good_month_year(self, month, year):
         # we can choose the correct month but we need the calendar open
@@ -101,7 +104,7 @@ class Booking:
 
     def select_day(self, day):
         # permet de scroller quand on n'a pas le bon mois affiché
-        xpathDay = "//span[contains(@aria-hidden, 'true') and contains(text(), '{}')]".format(day)
+        xpathDay = "//span[contains(@aria-hidden, 'true') and contains(text(), '{}')]".format(int(day))
         self.get_by_xpath(xpathDay).click()
 
     def set_date(self, start_date, end_date):
@@ -251,7 +254,8 @@ class Booking:
     def get_last_page(self):
         return int(self.driver.find_elements(by="xpath", value="//li[contains(@class, 'f32a99c8d1')]")[-1].text)
 
-    def main(self):
+    def process_search_results(self):
+        # try:
         self.driver.get(
             "https://www.booking.com/index.fr.html?label=gen173nr-1BCAEoggI46AdIM1gEaE2IAQGYAQ24ARfIAQzYAQHoAQGIAgGoAgO4Arf4yJEGwAIB0gIkNmMwYWYwNGUtNGY3Ni00ZTk3LThjOGUtZWQ0OTEwMDZkZGMw2AIF4AIB;sid=4870985d274b91999c83d2a5d6f77393;keep_landing=1&sb_price_type=total&")
         self.accept_cookies()
@@ -263,26 +267,35 @@ class Booking:
         self.set_date(self.start_date, self.end_date)
         self.applyFamilyAndDate()
 
-        current_page = self.get_current_page()
-        last_page = self.get_last_page()
-        self.iCanWorkAlone = True
+    # except:
+    #     self.iCanWork = False
+    #     self.driver.close()
 
-        while current_page < last_page:
-            time.sleep(3)
-            cf.addRows(
-                names=self.get_names(),
-                stars=self.get_stars(),
-                prices=self.get_prices(),
-                gps=self.get_gps(),
-                addresses=self.get_addresses(),
-                links=self.get_links(),
-                grades=self.get_grades(),
-                filename=self.filename,
-                is_head=current_page == 1)
-            self.changePage()
-            current_page += 1
+    def main(self):
+        if self.iCanWork:
+            try:
+                current_page = self.get_current_page()
+                last_page = self.get_last_page()
+                while current_page < last_page:
+                    time.sleep(3)
+                    cf.addRows(
+                        names=self.get_names(),
+                        stars=self.get_stars(),
+                        prices=self.get_prices(),
+                        gps=self.get_gps(),
+                        addresses=self.get_addresses(),
+                        links=self.get_links(),
+                        grades=self.get_grades(),
+                        filename=self.filename,
+                        start_date=[self.start_date for i in range(25)],
+                        end_date=[self.end_date for i in range(25)],
+                        is_head=current_page == 1)
+                    self.changePage()
+                    current_page += 1
 
-        self.driver.close()
+                self.driver.close()
+            except:
+                self.driver.close()
 
 
 if __name__ == '__main__':
