@@ -44,6 +44,7 @@ class Booking:
         self.nbr_room = nbr_room
         self.city = city
         self.filename = filename
+        self.iCanWorkAlone = False
 
         if type(ages_of_children) is not list:
             raise NotTheCorrectTypeForAgesOfChildren()
@@ -86,7 +87,7 @@ class Booking:
                 is_good_month_shows = True
             else:
                 try:
-                    self.get_by_xpath("//button[contains(@class, 'd40f3b0d6d f5ea4b08ab')]").click()
+                    self.get_by_xpath("//button[contains(@class, 'c9fa5fc96d be298b15fa')]").click()
                 except:
                     self.get_by_xpath(
                         "//*[local-name()='div' and contains(@class, 'bui-calendar__control bui-calendar__control--next')]").click()
@@ -125,7 +126,7 @@ class Booking:
         self.select_day(end_day)
 
     def get_names_and_links_in_cards(self):
-        return self.driver.find_elements(by="class name", value="fb01724e5b")
+        return self.driver.find_elements(by="xpath", value="//a[contains(@class, 'e13098a59f')]")
 
     def get_names(self):
         return list(
@@ -140,7 +141,7 @@ class Booking:
         cards = self.get_cards()
         for card in cards:
             try:
-                grade = card.find_element(by="xpath", value="./*//div[contains(@class, '_9c5f726ff bd528f9ea6')]")
+                grade = card.find_element(by="xpath", value="./*//div[contains(@class, 'b5cd09854e d10a6220b4')]")
                 grades.append(grade.text if not None else np.nan)
             except:
                 grades.append(np.nan)
@@ -150,7 +151,7 @@ class Booking:
     def get_prices(self):
         return list(map(lambda price: price.text.split(" ")[1] if price is not None else np.nan,
                         self.driver.find_elements(by="xpath",
-                                                  value="//span[contains(@class, 'fde444d7ef _e885fdc12')]")))
+                                                  value="//span[contains(@class, 'fcab3ed991 bd73d13072')]")))
 
     def get_addresses(self):
         return list(map(lambda address: address.text if address is not None else np.nan,
@@ -162,7 +163,7 @@ class Booking:
                 self.get_addresses()))
 
     def get_cards(self):
-        return self.driver.find_elements(by="xpath", value="//div[contains(@class, '_7192d3184')]")
+        return self.driver.find_elements(by="xpath", value="//div[contains(@class, 'b978843432')]")
 
     def get_stars(self):
         stars = []
@@ -245,10 +246,10 @@ class Booking:
                 .click()
 
     def get_current_page(self):
-        return int(self.driver.find_element(by="xpath", value="//li[contains(@class, 'ce83a38554 f38c6bbd53')]").text)
+        return int(self.driver.find_element(by="xpath", value="//li[contains(@class, 'f32a99c8d1 ebd02eda9e')]").text)
 
     def get_last_page(self):
-        return int(self.driver.find_elements(by="xpath", value="//li[contains(@class, 'ce83a38554')]")[-1].text)
+        return int(self.driver.find_elements(by="xpath", value="//li[contains(@class, 'f32a99c8d1')]")[-1].text)
 
     def main(self):
         self.driver.get(
@@ -264,6 +265,7 @@ class Booking:
 
         current_page = self.get_current_page()
         last_page = self.get_last_page()
+        self.iCanWorkAlone = True
 
         while current_page < last_page:
             time.sleep(3)
