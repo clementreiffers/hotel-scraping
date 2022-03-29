@@ -238,4 +238,4 @@ df = pd.DataFrame(list(zip(name, grade, stars, prices, address, localisation, da
 
 # création du CSV
 
-df.to_csv("csv/hotelsComDecembre4.csv",index = False, sep=";")
+df.to_csv("csv/hotelsCom/hotelsComDecembre4.csv",index = False, sep=";")
