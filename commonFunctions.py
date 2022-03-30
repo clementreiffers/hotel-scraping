@@ -35,7 +35,9 @@ month_digits_dictionary = {
 }
 
 
-def addRows(names, stars, prices, grades, gps, addresses, start_date, end_date, links, filename, is_head):
+def addRows(names, stars, prices, grades, gps, addresses,
+            start_date, end_date, links, filename, is_head,
+            nb_adults, nb_children, nb_room):
     """
     :param end_date: the date you choose for the research
     :param start_date: the date you choose for the research
@@ -61,6 +63,9 @@ def addRows(names, stars, prices, grades, gps, addresses, start_date, end_date, 
             "gps": gps,
             "start_date": start_date,
             "end_date": end_date,
+            "nb_adulte": nb_adults,
+            "nb_enfant": nb_children,
+            "nb_chambre": nb_room,
             "link": links,
         }
     )
@@ -100,3 +105,5 @@ def separateAmericanDate(date):
 def date_format_eu_to_us(date):
     date = list(reversed(date.split('-')))
     return date[0] + '-' + date[1] + '-' + date[2]
+
+

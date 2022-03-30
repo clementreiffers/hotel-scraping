@@ -162,7 +162,7 @@ class Booking:
 
     def get_gps(self):
         return list(
-            map(lambda address: cf.getLocalisationFromAdd(address) if address is not None else np.nan,
+            map(lambda address: cf.getLocalisationFromAdd(address),
                 self.get_addresses()))
 
     def get_cards(self):
@@ -255,21 +255,19 @@ class Booking:
         return int(self.driver.find_elements(by="xpath", value="//li[contains(@class, 'f32a99c8d1')]")[-1].text)
 
     def process_search_results(self):
-        # try:
-        self.driver.get(
-            "https://www.booking.com/index.fr.html?label=gen173nr-1BCAEoggI46AdIM1gEaE2IAQGYAQ24ARfIAQzYAQHoAQGIAgGoAgO4Arf4yJEGwAIB0gIkNmMwYWYwNGUtNGY3Ni00ZTk3LThjOGUtZWQ0OTEwMDZkZGMw2AIF4AIB;sid=4870985d274b91999c83d2a5d6f77393;keep_landing=1&sb_price_type=total&")
-        self.accept_cookies()
+        try:
+            self.driver.get(
+                "https://www.booking.com/index.fr.html?label=gen173nr-1BCAEoggI46AdIM1gEaE2IAQGYAQ24ARfIAQzYAQHoAQGIAgGoAgO4Arf4yJEGwAIB0gIkNmMwYWYwNGUtNGY3Ni00ZTk3LThjOGUtZWQ0OTEwMDZkZGMw2AIF4AIB;sid=4870985d274b91999c83d2a5d6f77393;keep_landing=1&sb_price_type=total&")
+            self.accept_cookies()
 
-        self.search_city(self.city)
-        self.set_family_and_room(self.nbr_adults, self.nbr_children, self.nbr_room, self.ages_of_children)
-        self.search()
+            self.search_city(self.city)
+            self.set_family_and_room(self.nbr_adults, self.nbr_children, self.nbr_room, self.ages_of_children)
+            self.search()
 
-        self.set_date(self.start_date, self.end_date)
-        self.applyFamilyAndDate()
-
-    # except:
-    #     self.iCanWork = False
-    #     self.driver.close()
+            self.set_date(self.start_date, self.end_date)
+            self.applyFamilyAndDate()
+        except:
+            self.driver.close()
 
     def main(self):
         if self.iCanWork:
@@ -287,8 +285,11 @@ class Booking:
                         links=self.get_links(),
                         grades=self.get_grades(),
                         filename=self.filename,
-                        start_date=[self.start_date for i in range(25)],
-                        end_date=[self.end_date for i in range(25)],
+                        start_date=[self.start_date for _ in range(25)],
+                        end_date=[self.end_date for _ in range(25)],
+                        nb_adults=[self.nbr_adults for _ in range(25)],
+                        nb_children=[self.nbr_children for _ in range(25)],
+                        nb_room=[self.nbr_room for _ in range(25)],
                         is_head=current_page == 1)
                     self.changePage()
                     current_page += 1
