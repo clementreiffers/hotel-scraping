@@ -116,7 +116,7 @@ class ScrapingTrivago:
         while next_page_button_present:
 
             self.__get_hotels()
-            self.__scroll_page()
+            # self.__scroll_page()
             print("Hotels data have been written")
             try:
                 self.__driver.find_element(by="xpath", value="//button[@data-testid='next-result-page']").click()
