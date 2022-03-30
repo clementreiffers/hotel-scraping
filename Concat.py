@@ -9,11 +9,13 @@ def concat(path, name):
    li = []
 
    for filename in all_files:
-      df = pd.read_csv(filename)
+      df = pd.read_csv(filename, sep=";")
       li.append(df)
 
    frame = pd.concat(li, axis=0, ignore_index=True)
-   frame.to_csv(name,sep=";")
+   frame.to_csv(name,index=False,sep=";")
 
-#concat("csv/booking","test.csv")
 
+#concat("csv/booking","csv/csv_par_site/booking_general.csv")
+concat("csv/hotelsCom","csv/csv_par_site/hotelsCom_general.csv")
+#concat("csv/trivago","csv/csv_par_site/trivago_general.csv"
