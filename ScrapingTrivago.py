@@ -15,8 +15,7 @@ To do :
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
+from multiprocessing import Process
 import time
 import commonFunctions as cf
 import numpy as np
@@ -137,7 +136,9 @@ class ScrapingTrivago:
             links=self.__get_hotels_link(),
             grades=self.__get_hotels_grade(),
             filename=self.__filename,
-            is_head=int(self.__get_current_page()) == 1)
+            is_head=int(self.__get_current_page()) == 1,
+            start_date=self.__start_date,
+            end_date=self.__end_date)
 
     def __click_all_localisation_buttons(self):
         time.sleep(2)
