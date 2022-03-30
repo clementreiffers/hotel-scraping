@@ -9,4 +9,3 @@ def concat(dossier, name):
       map(pd.read_csv, liste), ignore_index=True)
 
    dataFrame.to_csv(name,sep=";")
-
