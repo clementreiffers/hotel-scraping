@@ -49,10 +49,10 @@ def separateDate(date):
 # éléments de recherche
 
 city = "Paris"
-date_set = "11/04/2023"
+date_set = "11/05/2023"
 current_date = datetime.date.today()
 nb_adulte = "2"
-nb_enfant = "0"
+nb_enfant = "2"
 
 date_day, date_month, date_year = separateDate(date_set)
 date_month_year = str(date_month) + " " + str(date_year)
@@ -238,4 +238,4 @@ df = pd.DataFrame(list(zip(name, grade, stars, prices, address, localisation, da
 
 # création du CSV
 
-df.to_csv("csv/hotelsCom/hotelsCom_Avril2023_2.csv",index = False, sep=";")
+df.to_csv("csv/hotelsCom/hotelsCom_Mai2023_4.csv",index = False, sep=";")
