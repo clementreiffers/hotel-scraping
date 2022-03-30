@@ -37,28 +37,29 @@ monthCorrespondances = {
     "12": "décembre",
 }
 
-def separateDate(date):
-    """
-    :param date: dd/MM/yyyy
-    :return: day, month, year
-    """
-    day, month, year = date.split("/")
-    month = monthCorrespondances[month]
-    return day, month, year
-
 # éléments de recherche
 
 city = "Paris"
-date_set = "11/05/2023"
+date_set = "06-11-2023"
 current_date = datetime.date.today()
-nb_adulte = "2"
-nb_enfant = "2"
+set_adulte = "2"
+set_enfant = "2"
+chambre = "1"
 
-date_day, date_month, date_year = separateDate(date_set)
-date_month_year = str(date_month) + " " + str(date_year)
+date_day, date_month, date_year = commonFunctions.separateAmericanDate(date_set)
+if len(str(date_month)) == 2:
+    month = monthCorrespondances.get(str(date_month))
+else:
+    month = monthCorrespondances.get("0" + str(date_month))
+date_month_year = month + " " + str(date_year)
+next_day = int(date_day) + 1
+date_end_set = str(date_month)+"-"+str(next_day)+"-"+str(date_year)
 
-current_date_month_year = monthCorrespondances.get("0" + str(current_date.month)) + " " + str(
-    current_date.year)
+if len(str(current_date.month)) == 2:
+    month = monthCorrespondances.get(str(current_date.month))
+else:
+    month = monthCorrespondances.get("0" + str(current_date.month))
+current_date_month_year = month + " " + str(current_date.year)
 
 # ouverture de la page
 driver = webdriver.Firefox()
@@ -115,7 +116,7 @@ while adulte != "1":
     btn[0].click()
     adulte = driver.find_element(by="xpath", value="//input[@id='adult-input-0']").get_attribute("value")
 
-while adulte < nb_adulte:
+while adulte < set_adulte:
     btn[1].click()
     adulte = driver.find_element(by="xpath", value="//input[@id='adult-input-0']").get_attribute("value")
 
@@ -123,11 +124,11 @@ while enfant != "0":
     btn[2].click()
     enfant = driver.find_element(by="xpath", value="//input[@id='child-input-0']").get_attribute("value")
 
-while enfant < nb_enfant:
+while enfant < set_enfant:
     btn[3].click()
     enfant = driver.find_element(by="xpath", value="//input[@id='child-input-0']").get_attribute("value")
 
-if nb_enfant == "2":
+if set_enfant == "2":
     select_element = driver.find_element(by="id", value='child-age-input-0-0')
     select_object = Select(select_element)
     select_object.select_by_index(10)
@@ -179,8 +180,11 @@ address = []
 stars = []
 localisation = []
 grade = []
-date = []
-nb_personne = []
+start_date = []
+end_date = []
+nb_adulte = []
+nb_enfant = []
+nb_chambre = []
 
 print(len(name))
 
@@ -221,8 +225,11 @@ for link in link_list:
     grade.append(grades)
     address.append(address_hotel)
     stars.append(stars_hotel)
-    date.append(date_set)
-    nb_personne.append(int(nb_adulte)+int(nb_enfant))
+    start_date.append(date_set)
+    end_date.append(date_end_set)
+    nb_adulte.append(set_adulte)
+    nb_enfant.append(set_enfant)
+    nb_chambre.append(chambre)
 
     # on ferme l'onglet
 
@@ -233,9 +240,10 @@ localisation = list(
     map(lambda add: commonFunctions.getLocalisationFromAdd(add) if address is not None else np.nan, address))
 
 
-df = pd.DataFrame(list(zip(name, grade, stars, prices, address, localisation, date, nb_personne, links)),
-                  columns=['name', 'grade','stars', 'prices','address', 'gps', 'date', 'nb_personne', 'link' ])
+df = pd.DataFrame(list(zip(name, grade, stars, prices, address, localisation, start_date, end_date, nb_adulte, nb_enfant, nb_chambre, links)),
+                  columns=['name', 'grade','stars', 'prices','address', 'gps', 'start_date','end_date', 'nb_adulte','nb_enfant','nb_chambre', 'link' ])
 
 # création du CSV
 
-df.to_csv("csv/hotelsCom/hotelsCom_Mai2023_4.csv",index = False, sep=";")
+df.to_csv("csv/hotelsCom/hotelsCom_Juin2023_4.csv",index = False, sep=";")
+

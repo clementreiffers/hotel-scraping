@@ -15,4 +15,5 @@ def concat(path, name):
    frame = pd.concat(li, axis=0, ignore_index=True)
    frame.to_csv(name,sep=";")
 
-concat("csv/booking","test.csv")
+#concat("csv/booking","test.csv")
+
