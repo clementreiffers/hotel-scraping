@@ -6,7 +6,6 @@ from os.path import isfile, join
 
 def concat(path, name):
    all_files = glob.glob(path + "/*.csv")
-
    li = []
 
    for filename in all_files:
