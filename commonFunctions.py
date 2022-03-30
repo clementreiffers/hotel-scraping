@@ -12,7 +12,7 @@ monthCorrespondances = {
     "05": "mai",
     "06": "juin",
     "07": "juillet",
-    "08": "aout",
+    "08": "août",
     "09": "septembre",
     "10": "octobre",
     "11": "novembre",
@@ -35,8 +35,10 @@ month_digits_dictionary = {
 }
 
 
-def addRows(names, stars, prices, grades, gps, addresses, links, filename, is_head):
+def addRows(names, stars, prices, grades, gps, addresses, start_date, end_date, links, filename, is_head):
     """
+    :param end_date: the date you choose for the research
+    :param start_date: the date you choose for the research
     :param prices: all prices you get from the website
     :param is_head: put True if you want to erase the existing file, False to append
     :param filename: the name of the file
@@ -57,6 +59,8 @@ def addRows(names, stars, prices, grades, gps, addresses, links, filename, is_he
             "prices": prices,
             "address": addresses,
             "gps": gps,
+            "start_date": start_date,
+            "end_date": end_date,
             "link": links,
         }
     )

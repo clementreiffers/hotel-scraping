@@ -223,5 +223,4 @@ class ScrapingTrivago:
 if __name__ == '__main__':
     booking_trivago = ScrapingTrivago("trivagoScraping.csv", "Paris", '20-04-2022', '21-04-2022', \
                                       2, ["10", "17", "15"], 3)
-
     booking_trivago.main()
