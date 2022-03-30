@@ -7,15 +7,8 @@ Created on Sat Mar  19 11:37:12 2022
 @author: QuentinM
 """
 
-"""
-To do :
-- Replace time.sleep by selenium waits
-- Add multithreading
-"""
-
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from multiprocessing import Process
 import time
 import commonFunctions as cf
 import numpy as np
@@ -130,15 +123,19 @@ class ScrapingTrivago:
         cf.addRows(
             names=self.__get_hotels_name(),
             stars=self.__get_hotels_stars(),
-            gps=self.__get_hotels_gps(locations_list),
             prices=self.__get_hotels_price(),
-            addresses=locations_list,
-            links=self.__get_hotels_link(),
             grades=self.__get_hotels_grade(),
+            gps=self.__get_hotels_gps(locations_list),
+            addresses=locations_list,
+            start_date=self.__start_date,
+            end_date=self.__end_date,
+            links=self.__get_hotels_link(),
             filename=self.__filename,
             is_head=int(self.__get_current_page()) == 1,
-            start_date=self.__start_date,
-            end_date=self.__end_date)
+            nb_adults=[self.__nbr_adults for _ in range(25)],
+            nb_children=[self.__nbr_children for _ in range(25)],
+            nb_room=[self.__nbr_room for _ in range(25)],
+        )
 
     def __click_all_localisation_buttons(self):
         time.sleep(2)
