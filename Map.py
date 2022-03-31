@@ -5,7 +5,8 @@ import numpy as np
 import folium
 
 # export du csv général
-df = pd.read_csv("hotel_scrap.csv", sep = ";")
+df = pd.read_csv("csv/hotel_scrap.csv", sep = ";")
+df2 = pd.read_csv("csv/csv_par_site/hotelsCom_general.csv", sep=";")
 
 
 # création de la carte
@@ -13,7 +14,9 @@ carte = folium.Map([48.850928, 2.346260], zoom_start=20)
 
 # suppression des lignes jumelles pout le même hotel
 df_carte = df[['gps','name','address','prices']]
-info_carte = df_carte.drop_duplicates(subset=['gps'], ignore_index = True)
+df_carte2 = df2[['gps','name','address','prices']]
+df_affich = pd.concat([df_carte,df_carte2],axis=0, ignore_index=True)
+info_carte = df_affich.drop_duplicates(subset=['name'], ignore_index = True)
 
 # récupération des données
 x = info_carte['gps']
