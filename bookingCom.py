@@ -43,7 +43,6 @@ class Booking:
         self.nbr_room = nbr_room
         self.city = city
         self.filename = filename
-        self.iCanWork = True
 
         if type(ages_of_children) is not list:
             raise NotTheCorrectTypeForAgesOfChildren()
@@ -270,33 +269,32 @@ class Booking:
             self.driver.close()
 
     def main(self):
-        if self.iCanWork:
-            try:
-                current_page = self.get_current_page()
-                last_page = self.get_last_page()
-                while current_page < last_page:
-                    time.sleep(3)
-                    cf.addRows(
-                        names=self.get_names(),
-                        stars=self.get_stars(),
-                        prices=self.get_prices(),
-                        gps=self.get_gps(),
-                        addresses=self.get_addresses(),
-                        links=self.get_links(),
-                        grades=self.get_grades(),
-                        filename=self.filename,
-                        start_date=[self.start_date for _ in range(25)],
-                        end_date=[self.end_date for _ in range(25)],
-                        nb_adults=[self.nbr_adults for _ in range(25)],
-                        nb_children=[self.nbr_children for _ in range(25)],
-                        nb_room=[self.nbr_room for _ in range(25)],
-                        is_head=current_page == 1)
-                    self.changePage()
-                    current_page += 1
+        try:
+            current_page = self.get_current_page()
+            last_page = self.get_last_page()
+            while current_page < last_page:
+                time.sleep(3)
+                cf.addRows(
+                    names=self.get_names(),
+                    stars=self.get_stars(),
+                    prices=self.get_prices(),
+                    gps=self.get_gps(),
+                    addresses=self.get_addresses(),
+                    links=self.get_links(),
+                    grades=self.get_grades(),
+                    filename=self.filename,
+                    start_date=[self.start_date for _ in range(25)],
+                    end_date=[self.end_date for _ in range(25)],
+                    nb_adults=[self.nbr_adults for _ in range(25)],
+                    nb_children=[self.nbr_children for _ in range(25)],
+                    nb_room=[self.nbr_room for _ in range(25)],
+                    is_head=current_page == 1)
+                self.changePage()
+                current_page += 1
 
-                self.driver.close()
-            except:
-                self.driver.close()
+            self.driver.close()
+        except:
+            self.driver.close()
 
 
 if __name__ == '__main__':
