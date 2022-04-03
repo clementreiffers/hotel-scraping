@@ -12,7 +12,7 @@ from selenium.webdriver.common.keys import Keys
 import time
 import commonFunctions as cf
 import numpy as np
-
+from selenium.webdriver.common.action_chains import ActionChains
 
 class ScrapingTrivago:
 
@@ -121,16 +121,36 @@ class ScrapingTrivago:
     def __get_hotels(self):
         self.__click_all_localisation_buttons()
         locations_list = self.__get_hotels_location()
+
+        names = self.__get_hotels_name()
+        stars = self.__get_hotels_stars()
+        prices = self.__get_hotels_price()
+        grades = self.__get_hotels_grade()
+        gps = self.__get_hotels_gps(locations_list)
+        start_date = self.__start_date
+        end_date = self.__end_date
+        links = self.__get_hotels_link()
+
+        print("------------------------------")
+        print(len(names))
+        print(len(stars))
+        print(len(prices))
+        print(len(grades))
+        print(len(locations_list))
+        print(len(gps))
+        print(len(links))
+        print("------------------------------")
+
         cf.addRows(
-            names=self.__get_hotels_name(),
-            stars=self.__get_hotels_stars(),
-            prices=self.__get_hotels_price(),
-            grades=self.__get_hotels_grade(),
-            gps=self.__get_hotels_gps(locations_list),
+            names=names,
+            stars=stars,
+            prices=prices,
+            grades=grades,
+            gps=gps,
             addresses=locations_list,
-            start_date=self.__start_date,
-            end_date=self.__end_date,
-            links=self.__get_hotels_link(),
+            start_date=start_date,
+            end_date=end_date,
+            links=links,
             filename=self.__filename,
             is_head=int(self.__get_current_page()) == 1,
             nb_adults=[self.__nbr_adults for _ in range(25)],
@@ -139,15 +159,19 @@ class ScrapingTrivago:
         )
 
     def __click_all_localisation_buttons(self):
+        # self.__scroll_page()
+        # time.sleep(4)
         time.sleep(2)
+        # hotels_tab_list = self.__driver.find_elements(by="xpath", value="//article[@data-qa='itemlist-element']")
         addresses_buttons = self.__driver.find_elements(by="xpath",
                                                         value="//button[@data-testid='distance-label-section']")
+        time.sleep(2)
         for addressButton in addresses_buttons:
             time.sleep(0.5)
-            # try:
+            # actions = ActionChains(self.__driver)
+            # actions.move_to_element(hotel_tab).perform()
+            # time.sleep(1)
             addressButton.click()
-            # except:
-            #     print("Error clicking detail button of an hotel.")
         show_hotels_policies_buttons = self.__driver \
             .find_elements(by="xpath", value="//button[@data-testid='hotel-policies-show-more']")
         for showHotelPoliciesButton in show_hotels_policies_buttons:
@@ -224,21 +248,21 @@ class ScrapingTrivago:
 
 
 if __name__ == '__main__':
-    # booking_trivago = ScrapingTrivago("csv/trivago/trivago_05-11-2022_to_05-12-2022_1_adults_0_children_2_rooms.csv",
-    #                                   "Paris", '11-05-2022', '12-05-2022', 1, [], 2)
-    # booking_trivago.main()
-    #
-    # booking_trivago = ScrapingTrivago("csv/trivago/trivago_05-11-2022_to_05-12-2022_1_adults_2_children_2_rooms.csv",
-    #                                   "Paris", '11-05-2022', '12-05-2022', 1, ["6", "6"], 2)
-    # booking_trivago.main()
-    #
-    # booking_trivago = ScrapingTrivago("csv/trivago/trivago_05-11-2022_to_05-12-2022_1_adults_4_children_2_rooms.csv",
-    #                                   "Paris", '11-05-2022', '12-05-2022', 1, ["6", "6", "6", "6"], 2)
-    # booking_trivago.main()
-    #
-    # booking_trivago = ScrapingTrivago("csv/trivago/trivago_05-11-2022_to_05-12-2022_4_adults_0_children_2_rooms.csv",
-    #                                   "Paris", '11-05-2022', '12-05-2022', 4, [], 2)
-    # booking_trivago.main()
+    booking_trivago = ScrapingTrivago("csv/trivago/trivago_05-11-2022_to_05-12-2022_1_adults_0_children_2_rooms.csv",
+                                      "Paris", '11-05-2022', '12-05-2022', 1, [], 2)
+    booking_trivago.main()
+
+    booking_trivago = ScrapingTrivago("csv/trivago/trivago_05-11-2022_to_05-12-2022_1_adults_2_children_2_rooms.csv",
+                                      "Paris", '11-05-2022', '12-05-2022', 1, ["6", "6"], 2)
+    booking_trivago.main()
+
+    booking_trivago = ScrapingTrivago("csv/trivago/trivago_05-11-2022_to_05-12-2022_1_adults_4_children_2_rooms.csv",
+                                      "Paris", '11-05-2022', '12-05-2022', 1, ["6", "6", "6", "6"], 2)
+    booking_trivago.main()
+
+    booking_trivago = ScrapingTrivago("csv/trivago/trivago_05-11-2022_to_05-12-2022_4_adults_0_children_2_rooms.csv",
+                                      "Paris", '11-05-2022', '12-05-2022', 4, [], 2)
+    booking_trivago.main()
 
     booking_trivago = ScrapingTrivago("csv/trivago/trivago_05-11-2022_to_05-12-2022_4_adults_2_children_2_rooms.csv",
                                       "Paris", '11-05-2022', '12-05-2022', 4, ["6", "6"], 2)
