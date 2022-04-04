@@ -16,7 +16,7 @@ monthCorrespondances = {
     "09": "septembre",
     "10": "octobre",
     "11": "novembre",
-    "12": "decembre",
+    "12": "décembre",
 }
 
 month_digits_dictionary = {
