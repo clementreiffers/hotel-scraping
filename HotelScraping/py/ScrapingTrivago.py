@@ -1,18 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""
-Created on Sat Mar  19 11:37:12 2022
-
-@author: QuentinM
-"""
-
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 import commonFunctions as cf
 import numpy as np
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.ui import WebDriverWait
 
 class ScrapingTrivago:
 
@@ -30,7 +27,11 @@ class ScrapingTrivago:
 
     def __click_cookies_button(self):
         time.sleep(2)
-        self.__driver.find_element(by="id", value="onetrust-accept-btn-handler").click()
+        # self.__driver.find_element(by="id", value="onetrust-accept-btn-handler").click()
+        wait = WebDriverWait(self.__driver, 10)
+        element = wait.until(EC.presence_of_element_located((By.ID, "onetrust-accept-btn-handler")))
+        element = wait.until(EC.element_to_be_clickable((By.ID, "onetrust-accept-btn-handler")))
+        element.click()
 
     def __select_hotel_tab(self):
         time.sleep(2)
@@ -107,9 +108,8 @@ class ScrapingTrivago:
         time.sleep(2)
         next_page_button_present = True
         while next_page_button_present:
-
+            self.__scroll_page()
             self.__get_hotels()
-            # self.__scroll_page()
             print("Hotels data have been written")
             try:
                 self.__driver.find_element(by="xpath", value="//button[@data-testid='next-result-page']").click()
@@ -120,6 +120,7 @@ class ScrapingTrivago:
 
     def __get_hotels(self):
         self.__click_all_localisation_buttons()
+        time.sleep(4)
         locations_list = self.__get_hotels_location()
 
         names = self.__get_hotels_name()
@@ -141,36 +142,37 @@ class ScrapingTrivago:
         print(len(links))
         print("------------------------------")
 
-        cf.addRows(
-            names=names,
-            stars=stars,
-            prices=prices,
-            grades=grades,
-            gps=gps,
-            addresses=locations_list,
-            start_date=start_date,
-            end_date=end_date,
-            links=links,
-            filename=self.__filename,
-            is_head=int(self.__get_current_page()) == 1,
-            nb_adults=[self.__nbr_adults for _ in range(25)],
-            nb_children=[self.__nbr_children for _ in range(25)],
-            nb_room=[self.__nbr_room for _ in range(25)],
-        )
+        try:
+            cf.addRows(
+                names=names,
+                stars=stars,
+                prices=prices,
+                grades=grades,
+                gps=gps,
+                addresses=locations_list,
+                start_date=start_date,
+                end_date=end_date,
+                links=links,
+                filename=self.__filename,
+                is_head=int(self.__get_current_page()) == 1,
+                nb_adults=[self.__nbr_adults for _ in range(25)],
+                nb_children=[self.__nbr_children for _ in range(25)],
+                nb_room=[self.__nbr_room for _ in range(25)],
+            )
+        except:
+            print("ERROR")
 
     def __click_all_localisation_buttons(self):
-        # self.__scroll_page()
-        # time.sleep(4)
         time.sleep(2)
-        # hotels_tab_list = self.__driver.find_elements(by="xpath", value="//article[@data-qa='itemlist-element']")
         addresses_buttons = self.__driver.find_elements(by="xpath",
                                                         value="//button[@data-testid='distance-label-section']")
         time.sleep(2)
         for addressButton in addresses_buttons:
             time.sleep(0.5)
-            # actions = ActionChains(self.__driver)
-            # actions.move_to_element(hotel_tab).perform()
-            # time.sleep(1)
+            # wait = WebDriverWait(self.__driver, 10)
+            # element = wait.until(EC.presence_of_element_located(addressButton))
+            # element = wait.until(EC.element_to_be_clickable(element))
+            # element.click()
             addressButton.click()
         show_hotels_policies_buttons = self.__driver \
             .find_elements(by="xpath", value="//button[@data-testid='hotel-policies-show-more']")
@@ -179,7 +181,8 @@ class ScrapingTrivago:
             showHotelPoliciesButton.click()
 
     def __scroll_page(self):
-        self.__driver.find_element(by="css selector", value="body").send_keys(Keys.CONTROL, Keys.END)
+        # self.__driver.find_element(by="css selector", value="body").send_keys(Keys.CONTROL, Keys.END)
+        self.__driver.find_element(by="css selector", value="body").send_keys(Keys.CONTROL, Keys.ARROW_DOWN)
         time.sleep(2)
 
     def __get_hotels_name(self):
@@ -244,26 +247,26 @@ class ScrapingTrivago:
         self.__validate_research()
         self.__copy_hotels_to_csv_loop()
         self.__driver.close()
-        self.__driver = None
+        # self.__driver = None
 
 
 if __name__ == '__main__':
-    booking_trivago = ScrapingTrivago("csv/trivago/trivago_05-11-2022_to_05-12-2022_1_adults_0_children_2_rooms.csv",
+    booking_trivago = ScrapingTrivago("../csv/trivago/trivago_05-11-2022_to_05-12-2022_1_adults_0_children_2_rooms.csv",
                                       "Paris", '11-05-2022', '12-05-2022', 1, [], 2)
     booking_trivago.main()
 
-    booking_trivago = ScrapingTrivago("csv/trivago/trivago_05-11-2022_to_05-12-2022_1_adults_2_children_2_rooms.csv",
+    booking_trivago2 = ScrapingTrivago("../csv/trivago/trivago_05-11-2022_to_05-12-2022_1_adults_2_children_2_rooms.csv",
                                       "Paris", '11-05-2022', '12-05-2022', 1, ["6", "6"], 2)
-    booking_trivago.main()
+    booking_trivago2.main()
 
-    booking_trivago = ScrapingTrivago("csv/trivago/trivago_05-11-2022_to_05-12-2022_1_adults_4_children_2_rooms.csv",
+    booking_trivago3 = ScrapingTrivago("../csv/trivago/trivago_05-11-2022_to_05-12-2022_1_adults_4_children_2_rooms.csv",
                                       "Paris", '11-05-2022', '12-05-2022', 1, ["6", "6", "6", "6"], 2)
-    booking_trivago.main()
+    booking_trivago3.main()
 
-    booking_trivago = ScrapingTrivago("csv/trivago/trivago_05-11-2022_to_05-12-2022_4_adults_0_children_2_rooms.csv",
+    booking_trivago4 = ScrapingTrivago("../csv/trivago/trivago_05-11-2022_to_05-12-2022_4_adults_0_children_2_rooms.csv",
                                       "Paris", '11-05-2022', '12-05-2022', 4, [], 2)
-    booking_trivago.main()
+    booking_trivago4.main()
 
-    booking_trivago = ScrapingTrivago("csv/trivago/trivago_05-11-2022_to_05-12-2022_4_adults_2_children_2_rooms.csv",
+    booking_trivago5 = ScrapingTrivago("../csv/trivago/trivago_05-11-2022_to_05-12-2022_4_adults_2_children_2_rooms.csv",
                                       "Paris", '11-05-2022', '12-05-2022', 4, ["6", "6"], 2)
-    booking_trivago.main()
+    booking_trivago5.main()
