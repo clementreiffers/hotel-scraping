@@ -22,7 +22,7 @@ for y in years:
         if isFuture:
             start_date.append("{0}-11-{1}".format(month[m], y))
             end_date.append("{0}-12-{1}".format(month[m], y))
-        if month[m] == "08" and y == "2022":
+        if month[m] == "11" and y == "2022":
             isFuture = True
         if month[m] == "05" and y == "2023":
             break
