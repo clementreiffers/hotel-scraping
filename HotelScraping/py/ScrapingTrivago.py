@@ -43,6 +43,7 @@ class ScrapingTrivago:
         self.__select_date(self.__end_date)
         self.__select_guests()
         self.__validate_research()
+        self.__click_maps_and_filter_buttons()
 
     def copy_hotels(self):
         self.__copy_hotels_to_csv_loop()
@@ -124,14 +125,18 @@ class ScrapingTrivago:
 
     def __validate_research(self):
         self.__driver.find_element(by="xpath", value="//button[@data-testid='search-button']").click()
-
-    def __copy_hotels_to_csv_loop(self):
         time.sleep(2)
+
+    def __click_maps_and_filter_buttons(self):
+        time.sleep(4)
         self.__driver.find_element(by="xpath", value="//label[@data-title='Hôtel']").click()  # Click hotel view filter
         time.sleep(2)
         self.__driver.find_element(by="xpath",
                                    value="//button[@data-testid='switch-view-button-desktop']").click()  # Click map cross
         time.sleep(2)
+
+    def __copy_hotels_to_csv_loop(self):
+        # self.__click_maps_and_filter_buttons()
         next_page_button_present = True
         while next_page_button_present:
             self.__scroll_page()
@@ -175,8 +180,8 @@ class ScrapingTrivago:
             print("SUCCESS in copying data from one page.")
         except:
             print("ERROR page can't be saved into csv file.")
-            self.__driver.refresh()
-            self.__get_hotels()
+            # self.__driver.refresh()
+            # self.__get_hotels()
 
     def __click_all_localisation_buttons(self):
         time.sleep(2)

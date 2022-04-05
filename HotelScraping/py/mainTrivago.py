@@ -44,7 +44,9 @@ for start, end in zip(start_date, end_date):
                 scraper_list.append(t)
                 print("csv : ", nbr_csv)
             except:
+                print("FATAL ERROR : Closing explorer")
                 t.force_driver_close()
+
 
     pool = ThreadPool(50)
     pool.map(call_main, scraper_list)
