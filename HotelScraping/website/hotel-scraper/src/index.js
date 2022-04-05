@@ -13,7 +13,7 @@ const root = createRoot(container);
 root.render(
     <Router>
         <Routes>
-            <Route path="/" element={<SearchHotels />}/>
+            <Route path="/" exact element={<SearchHotels />}/>
             <Route path="/ShowResults" element={<ShowResults />}/>
         </Routes>
     </Router>
