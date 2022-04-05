@@ -20,19 +20,33 @@ monthCorrespondances = {
 }
 
 month_digits_dictionary = {
-    "January": "01",
-    "February": "02",
-    "March": "03",
-    "April": "04",
-    "May": "05",
-    "June": "06",
-    "July": "07",
-    "August": "08",
-    "September": "09",
-    "October": "10",
-    "November": "11",
-    "December": "12",
+    "Janvier": "01",
+    "Février": "02",
+    "Mars": "03",
+    "Avril": "04",
+    "Mai": "05",
+    "Juin": "06",
+    "Juillet": "07",
+    "Août": "08",
+    "Septembre": "09",
+    "Octobre": "10",
+    "Novembre": "11",
+    "Décembre": "12",
 }
+# month_digits_dictionary = {
+#     "January": "01",
+#     "February": "02",
+#     "March": "03",
+#     "April": "04",
+#     "May": "05",
+#     "June": "06",
+#     "July": "07",
+#     "August": "08",
+#     "September": "09",
+#     "October": "10",
+#     "November": "11",
+#     "December": "12",
+# }
 
 
 def addRows(names, stars, prices, grades, gps, addresses,
@@ -102,8 +116,8 @@ def separateAmericanDate(date):
     return day, month, year
 
 
-def date_format_eu_to_us(date):
+def date_format_us_to_website(date):
     date = list(reversed(date.split('-')))
-    return date[0] + '-' + date[1] + '-' + date[2]
+    return date[0] + '-' + date[2] + '-' + date[1]
 
 
