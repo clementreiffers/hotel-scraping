@@ -1,11 +1,19 @@
 import React from "react";
+import {useNavigate} from "react-router-dom";
 
-const Field = ({name, value, onChange, type, children}) => {
+export const Field = ({name, value, onChange, type, children}) => {
     return <div className="form-group">
-            <label htmlFor={name}>{children}</label>
-            <input type={type} className={name} name={name} id={name} value={value}
-                   onChange={onChange}/>
-        </div>
+        <label htmlFor={name}>{children}</label>
+        <input type={type} className={name} name={name} id={name} value={value}
+               onChange={onChange}/>
+    </div>
 }
 
-export default Field;
+export const Submit = ({city, adults, children, rooms, startDate, endDate}) => {
+    const navigate = useNavigate();
+    return (
+        <button onClick={() => navigate(
+            "/ShowResults?city="+city+"&adults="+adults+"&children="+children+"&rooms="+rooms+"&startDate="+startDate+"endDate="+endDate
+        )}>valider</button>
+    )
+};

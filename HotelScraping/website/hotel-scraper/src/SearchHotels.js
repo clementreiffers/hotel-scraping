@@ -1,6 +1,6 @@
 import "./SearchHotels.css"
 import React from "react";
-import Field from "./Fields";
+import {Field, Submit} from "./Fields";
 
 class SearchHotels extends React.Component {
 
@@ -8,12 +8,12 @@ class SearchHotels extends React.Component {
         super(props);
 
         this.state = {
-            search:'',
-            startDate:'',
-            endDate:'',
-            rooms:0,
-            children:0,
-            adults:0
+            city:null,
+            startDate:null,
+            endDate:null,
+            rooms:null,
+            children:null,
+            adults:null
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -31,26 +31,25 @@ class SearchHotels extends React.Component {
     }
 
     handleSubmit(event) {
-        /*
-        ici il faudra renvoyer this.state qui definie precisement la recherche
-         */
 
-        alert("recherche : " + this.state);
-        console.table(this.state);
-        event.preventDefault();
     }
 
     render() {
         return (
             <div className="divForm">
                 <form onSubmit={this.handleSubmit}>
-                    <Field value={this.state.search} onChange={this.handleChange} name="search" type="text">search</Field>
+                    <Field value={this.state.city} onChange={this.handleChange} name="city" type="text">city</Field>
                     <Field value={this.state.adults} onChange={this.handleChange} name="adults" type="number">adults</Field>
                     <Field value={this.state.children} onChange={this.handleChange} name="children" type="number">children</Field>
                     <Field value={this.state.rooms} onChange={this.handleChange} name="rooms" type="number">rooms</Field>
                     <Field value={this.state.startDate} onChange={this.handleChange} name="start_date" type="date">start date</Field>
                     <Field value={this.state.endDate} onChange={this.handleChange} name="end_date" type="date">end date</Field>
-                    <input type="submit" className="submit" />
+                    <Submit city={this.state.city}
+                            adults={this.state.adults}
+                            children={this.state.children}
+                            rooms={this.state.rooms}
+                            startDate={this.state.startDate}
+                            endDate={this.state.endDate} />
                 </form>
                 {JSON.stringify(this.state)}
             </div>

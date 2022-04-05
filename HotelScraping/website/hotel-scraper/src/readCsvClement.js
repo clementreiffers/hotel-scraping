@@ -2,7 +2,7 @@ import * as R from "ramda";
 import * as fs from "fs";
 
 const splitData_ = R.pipe(
-    R.split("\n"),
+    R.split("\r\n"),
     R.map(R.split(";")),
 );
 
