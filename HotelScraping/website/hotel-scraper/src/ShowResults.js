@@ -1,30 +1,11 @@
 import "./SearchHotels.css"
 import React from "react";
+import {useLocation} from "react-router-dom";
 
-class ShowResults extends React.Component {
-
-    constructor(props) {
-        super(props);
-
-        this.state = {};
-
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    handleChange(event) {
-
-    }
-
-    handleSubmit(event) {
-
-    }
-
-    render() {
-        return (
-            <h1>test</h1>
-        );
-    }
+const GetAllUrl = (type) => {
+    const {search} = useLocation();
+    for(type of ["city", "adults", "children", "rooms", "startDate", "endDate"])
+        const match = search.match("/"+type+"=(.*)/")?.[1];
 }
 
 export default ShowResults;
