@@ -1,5 +1,6 @@
 import "./SearchHotels.css"
 import React from "react";
+import Field from "./Fields";
 
 class SearchHotels extends React.Component {
 
@@ -43,20 +44,17 @@ class SearchHotels extends React.Component {
         return (
             <div className="divForm">
                 <form onSubmit={this.handleSubmit}>
-
-                    <input type="search" className="search" name="value" value={this.state.value} onChange={this.handleChange}/>
-                    <input type="number" className="nbr" name="adults" value={this.state.adults} onChange={this.handleChange}/>
-                    <input type="number" className="nbr" name="children" value={this.state.children} onChange={this.handleChange}/>
-                    <input type="number" className="nbr" name="rooms" value={this.state.rooms} onChange={this.handleChange}/>
-                    <div className="dates">
-                        <input type="date" className="date" name="startDate" value={this.state.startDate} onChange={this.handleChange}/>
-                        <input type="date" className="date" name="endDate" value={this.state.endDate} onChange={this.handleChange}/>
-                    </div>
+                    <Field value={this.state.search} onChange={this.handleChange} name="search" type="text">search</Field>
+                    <Field value={this.state.adults} onChange={this.handleChange} name="adults" type="number">adults</Field>
+                    <Field value={this.state.children} onChange={this.handleChange} name="children" type="number">children</Field>
+                    <Field value={this.state.rooms} onChange={this.handleChange} name="rooms" type="number">rooms</Field>
+                    <Field value={this.state.startDate} onChange={this.handleChange} name="start_date" type="date">start date</Field>
+                    <Field value={this.state.endDate} onChange={this.handleChange} name="end_date" type="date">end date</Field>
                     <input type="submit" className="submit" />
                 </form>
+                {JSON.stringify(this.state)}
             </div>
-        )
-            ;
+        );
     }
 }
 
