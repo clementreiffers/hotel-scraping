@@ -1,9 +1,10 @@
 import * as R from "ramda";
 import * as fs from "fs";
+import {find} from "ramda";
 
 const splitData_ = R.pipe(
     R.split("\r\n"),
-    R.map(R.split(";")),
+    R.map(R.split(";"))
 );
 
 const transformDataToJsonLike_ = R.applySpec({
@@ -30,5 +31,26 @@ const getJson = R.pipe(
 const data = fs.readFileSync('../../../csv/csv_par_site/booking_general.csv',
     {encoding: 'utf8', flag: 'r'});
 
+//console.log(getJson(data));
 
-console.log(getJson(data));
+
+const findElements = (columnName, value, list) => {
+    return R.filter(R.propEq(columnName, value), list);
+};
+
+//console.log(findElements("name","Moris Grands Boulevards",getJson(data)));
+
+function getHotelsFromDic(dictionary) {
+    let filtered = getJson(data);
+    for (let key in dictionary) {
+        filtered = findElements(key, dictionary[key], filtered);
+    }
+    return filtered;
+}
+
+console.log(getHotelsFromDic({
+    "name":"Moris Grands Boulevards",
+    "adults":"1",
+    "children":"2",
+    "start_date":"08-11-2022"
+}));

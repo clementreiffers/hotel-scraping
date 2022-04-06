@@ -1,0 +1,15 @@
+{
+  "name": "src",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "readCsvClement.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "ramda": "^0.28.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
