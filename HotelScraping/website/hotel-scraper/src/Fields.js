@@ -13,7 +13,7 @@ export const Submit = ({city, adults, children, rooms, startDate, endDate}) => {
     const navigate = useNavigate();
     return (
         <button onClick={() => navigate(
-            "/ShowResults?city="+city+"&adults="+adults+"&children="+children+"&rooms="+rooms+"&startDate="+startDate+"endDate="+endDate
+            "/ShowResults?city="+city+"&adults="+adults+"&children="+children+"&rooms="+rooms+"&startDate="+startDate+"&endDate="+endDate
         )}>valider</button>
     )
 };
