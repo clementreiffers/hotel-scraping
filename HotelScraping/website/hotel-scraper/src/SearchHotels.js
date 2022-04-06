@@ -42,8 +42,8 @@ class SearchHotels extends React.Component {
                     <Field value={this.state.adults} onChange={this.handleChange} name="adults" type="number">adults</Field>
                     <Field value={this.state.children} onChange={this.handleChange} name="children" type="number">children</Field>
                     <Field value={this.state.rooms} onChange={this.handleChange} name="rooms" type="number">rooms</Field>
-                    <Field value={this.state.startDate} onChange={this.handleChange} name="start_date" type="date">start date</Field>
-                    <Field value={this.state.endDate} onChange={this.handleChange} name="end_date" type="date">end date</Field>
+                    <Field value={this.state.startDate} onChange={this.handleChange} name="startDate" type="date">start date</Field>
+                    <Field value={this.state.endDate} onChange={this.handleChange} name="endDate" type="date">end date</Field>
                     <Submit city={this.state.city}
                             adults={this.state.adults}
                             children={this.state.children}
