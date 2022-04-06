@@ -1,5 +1,6 @@
 import "./SearchHotels.css"
 import React from "react";
+import {Field, Submit} from "./Fields";
 
 class SearchHotels extends React.Component {
 
@@ -7,12 +8,12 @@ class SearchHotels extends React.Component {
         super(props);
 
         this.state = {
-            search:'',
-            startDate:'',
-            endDate:'',
-            rooms:0,
-            children:0,
-            adults:0
+            city:null,
+            startDate:null,
+            endDate:null,
+            rooms:null,
+            children:null,
+            adults:null
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -30,33 +31,29 @@ class SearchHotels extends React.Component {
     }
 
     handleSubmit(event) {
-        /*
-        ici il faudra renvoyer this.state qui definie precisement la recherche
-         */
 
-        alert("recherche : " + this.state);
-        console.table(this.state);
-        event.preventDefault();
     }
 
     render() {
         return (
             <div className="divForm">
                 <form onSubmit={this.handleSubmit}>
-
-                    <input type="search" className="search" name="value" value={this.state.value} onChange={this.handleChange}/>
-                    <input type="number" className="nbr" name="adults" value={this.state.adults} onChange={this.handleChange}/>
-                    <input type="number" className="nbr" name="children" value={this.state.children} onChange={this.handleChange}/>
-                    <input type="number" className="nbr" name="rooms" value={this.state.rooms} onChange={this.handleChange}/>
-                    <div className="dates">
-                        <input type="date" className="date" name="startDate" value={this.state.startDate} onChange={this.handleChange}/>
-                        <input type="date" className="date" name="endDate" value={this.state.endDate} onChange={this.handleChange}/>
-                    </div>
-                    <input type="submit" className="submit" />
+                    <Field value={this.state.city} onChange={this.handleChange} name="city" type="text">city</Field>
+                    <Field value={this.state.adults} onChange={this.handleChange} name="adults" type="number">adults</Field>
+                    <Field value={this.state.children} onChange={this.handleChange} name="children" type="number">children</Field>
+                    <Field value={this.state.rooms} onChange={this.handleChange} name="rooms" type="number">rooms</Field>
+                    <Field value={this.state.startDate} onChange={this.handleChange} name="startDate" type="date">start date</Field>
+                    <Field value={this.state.endDate} onChange={this.handleChange} name="endDate" type="date">end date</Field>
+                    <Submit city={this.state.city}
+                            adults={this.state.adults}
+                            children={this.state.children}
+                            rooms={this.state.rooms}
+                            startDate={this.state.startDate}
+                            endDate={this.state.endDate} />
                 </form>
+                {JSON.stringify(this.state)}
             </div>
-        )
-            ;
+        );
     }
 }
 
