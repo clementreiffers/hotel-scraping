@@ -1,12 +1,12 @@
 import React from 'react';
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import {createRoot} from "react-dom/client";
-import reportWebVitals from './reportWebVitals';
+import reportWebVitals from './reportWebVitals.js';
 
 import './index.css';
 
-import SearchHotels from "./SearchHotels";
-import ShowResults from "./ShowResults";
+import SearchHotels from "./SearchHotels.js";
+import ShowResults from "./ShowResults.js";
 
 const container = document.getElementById("root")
 const root = createRoot(container);

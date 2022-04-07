@@ -1,6 +1,6 @@
 import "./SearchHotels.css"
 import React from "react";
-import {Field, Submit} from "./Fields";
+import {Field, Submit} from "./Fields.js";
 
 class SearchHotels extends React.Component {
 

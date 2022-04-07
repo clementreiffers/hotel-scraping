@@ -48,9 +48,4 @@ function getHotelsFromDic(dictionary) {
     return filtered;
 }
 
-console.log(getHotelsFromDic({
-    "name":"Moris Grands Boulevards",
-    "adults":"1",
-    "children":"2",
-    "start_date":"08-11-2022"
-}));
+fetch("booking_general.csv").then(data =>console.log(data.text()))
