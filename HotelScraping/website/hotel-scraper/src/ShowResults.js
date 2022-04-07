@@ -2,70 +2,68 @@ import "./SearchHotels.css"
 import React, {useState} from "react";
 import * as R from "ramda";
 import * as XLSX from "xlsx";
+import * as dfd from "danfojs";
 
 const removeTypeFromUrl = R.pipe(
-        R.split("="),
-        R.nth(1)
-    )
+    R.split("="),
+    R.nth(1)
+)
 
 const getAllValuesFromUrl = R.pipe(
-        R.split("?"),
-        R.nth(1),
-        R.split("&"),
-        R.map(removeTypeFromUrl),
-        R.applySpec({
-            city:R.nth(0),
-            adults:R.nth(1),
-            children: R.nth(2),
-            rooms:R.nth(3),
-            startDate:R.nth(4),
-            endDate:R.nth(5)
-        })
-    )
+    R.split("?"),
+    R.nth(1),
+    R.split("&"),
+    R.map(removeTypeFromUrl),
+    R.applySpec({
+        city: R.nth(0),
+        adults: R.nth(1),
+        children: R.nth(2),
+        rooms: R.nth(3),
+        startDate: R.nth(4),
+        endDate: R.nth(5)
+    })
+)
 
 function App() {
     const [items, setItems] = useState([]);
 
-    const readExcel = (file) => {
-        const promise = new Promise((resolve, reject) => {
-            const fileReader = new FileReader();
-            fileReader.readAsArrayBuffer(file);
+    const readExcel = (filename) => {
+        const df = dfd.readCSV(filename)
+            .then((d) => {
+                    const promise = new Promise((resolve, reject) => {
 
-            fileReader.onload = (e) => {
-                const bufferArray = e.target.result;
+                        const data = {};
+                        let char = "A";
+                        let number = 1;
+                        let code = char + number;
+                        for (let col of d["columns"]) {
+                            data[code] = {t: "s", v: col, w: col};
+                            number++;
+                            code = char + number;
+                            for (let values of d[col].values) {
+                                data[code] = {t: "s", w: values, v: values}
+                                number++;
+                                code = char + number;
+                            }
+                            number = 1;
+                            char = String.fromCharCode(char.charCodeAt(0) + 1)
 
-                const wb = XLSX.read(bufferArray, { type: "buffer" });
-
-                const wsname = wb.SheetNames[0];
-
-                const ws = wb.Sheets[wsname];
-
-                const data = XLSX.utils.sheet_to_json(ws);
-
-                resolve(data);
-            };
-
-            fileReader.onerror = (error) => {
-                reject(error);
-            };
-        });
-
-        promise.then((d) => {
-            setItems(d);
-        });
-    };
-
+                        }
+                        resolve(data);
+                    });
+                    promise.then((d) => {
+                            setItems(d);
+                        }
+                    )
+                },
+            )
+        // items.map((d)=> console.log(d));
+        console.log(items);
+    }
     return (
         <div>
-            <input
-                type="file"
-                onChange={(e) => {
-                    const file = e.target.files[0];
-                    readExcel(file);
-                }}
-            />
-
-            <table class="table container">
+            {readExcel("test.csv")}
+            <table className="table container">
                 <thead>
                 <tr>
                     <th scope="col">name</th>
@@ -83,6 +81,7 @@ function App() {
             </table>
         </div>
     );
+
 }
 
 

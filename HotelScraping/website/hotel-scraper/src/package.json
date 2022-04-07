@@ -8,6 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "danfojs": "^1.1.0",
     "ramda": "^0.28.0",
     "xlsx": "^0.18.5"
   },
