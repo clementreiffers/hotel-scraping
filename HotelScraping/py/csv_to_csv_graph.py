@@ -1,5 +1,9 @@
 import pandas as pd
 
+import commonFunctions as cf
+
+# Add headers to csv
+# Reorder the date like YYYY-MM-DD
 
 def create_csvgraph_from_csv(path, column_ref_name, column_value_name):
     df = pd.read_csv(path, sep=";")
@@ -25,13 +29,16 @@ def create_array_refs_sums(references_list, values):
     return mean_list
 
 
-def create_csv(path, list):
+def create_csv(path, list, column_name1, column_name2):
     f = open(path, "w")
+    f.write("{};{}\n".format(column_name1, column_name2))
     for line in list:
-        f.write("{};{}\n".format(line[0], line[1]))
+        date = cf.date_format_MMDDYYYY_to_YYYYMMDD(line[0])
+        print(date)
+        f.write("{};{}\n".format(date, line[1]))
     f.close()
 
 
 if __name__ == '__main__':
     booking_list = create_csvgraph_from_csv("../csv/csv_par_site/booking_general.csv", "start_date", "prices")
-    create_csv("../csv/csv_graphs/booking_csv_graph.csv", booking_list)
+    create_csv("../csv/csv_graphs/booking_csv_graph.csv", booking_list, "dates", "prices")

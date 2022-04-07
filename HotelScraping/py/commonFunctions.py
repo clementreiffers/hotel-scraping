@@ -120,4 +120,6 @@ def date_format_us_to_website(date):
     date = list(reversed(date.split('-')))
     return date[0] + '-' + date[2] + '-' + date[1]
 
-
+def date_format_MMDDYYYY_to_YYYYMMDD(date):
+    date = date.split("-")
+    return date[2] + '-' + date[0] + '-' + date[1]
