@@ -19,7 +19,7 @@
                 let layout = {
                     title: "A financial charts",
                     xaxis: {
-                        title: "Dates",
+                        title: "Date",
                     },
                     yaxis: {
                         title: "Prices",
@@ -27,10 +27,10 @@
                 };
 
                 let config = {
-                    columns: ["prices"],
+                    columns: ["Price"],
                 };
 
-                let new_df = df.setIndex({ column: "dates" });
+                let new_df = df.setIndex({ column: "Date" });
                 new_df.plot("plot_div").line({ config, layout });
 
             }).catch(err => {
