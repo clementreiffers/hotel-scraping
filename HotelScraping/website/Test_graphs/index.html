@@ -11,18 +11,18 @@
 <body>
     <div id="plot_div"></div>
     <script>
-        dfd.readCSV("https://raw.githubusercontent.com/clementreiffers/HotelScraping/main/HotelScraping/csv/csv_graphs/booking_csv_graph.csv")
+        dfd.readCSV("https://raw.githubusercontent.com/clementreiffers/HotelScraping/41ea2b99a63ef650b9215dc1578ed3f58d577c63/HotelScraping/csv/csv_graphs/booking_csv_graph.csv")
             .then(df => {
                 //do something with the CSV file
                 df.head().print()
 
                 let layout = {
-                    title: "A financial charts",
+                    title: "Prices of hotel per months",
                     xaxis: {
                         title: "Date",
                     },
                     yaxis: {
-                        title: "Prices",
+                        title: "Price",
                     },
                 };
 
