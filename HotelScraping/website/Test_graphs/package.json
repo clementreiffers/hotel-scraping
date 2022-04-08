@@ -1,0 +1,10 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "main": "test.js",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "danfojs-node": "^1.1.0"
+  }
+}
