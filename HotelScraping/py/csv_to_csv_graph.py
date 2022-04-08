@@ -41,4 +41,4 @@ def create_csv(path, list, column_name1, column_name2):
 
 if __name__ == '__main__':
     booking_list = create_csvgraph_from_csv("../csv/csv_par_site/booking_general.csv", "start_date", "prices")
-    create_csv("../csv/csv_graphs/booking_csv_graph.csv", booking_list, "dates", "prices")
+    create_csv("../csv/csv_graphs/booking_csv_graph.csv", booking_list, "Date", "Price")
