@@ -18,9 +18,10 @@ def concat(path, name):
 
 #concat("C:/Users/ACER/PycharmProjects/HotelScraping/HotelScraping/csv/booking","C:/Users/ACER/PycharmProjects/HotelScraping/HotelScraping/csv/csv_par_site/booking_general.csv")
 #concat("C:/Users/ACER/PycharmProjects/HotelScraping/HotelScraping/csv/hotelsCom","C:/Users/ACER/PycharmProjects/HotelScraping/HotelScraping/csv/csv_par_site/hotelsCom_general.csv")
-#concat("C:/Users/ACER/PycharmProjects/HotelScraping/HotelScraping/csv/trivago","C:/Users/ACER/PycharmProjects/HotelScraping/HotelScraping/csv/csv_par_site/trivago_general.csv"
+#concat("C:/Users/ACER/PycharmProjects/HotelScraping/HotelScraping/csv/trivago","C:/Users/ACER/PycharmProjects/HotelScraping/HotelScraping/csv/csv_par_site/trivago_general.csv")
 
-concat("C:/Users/ACER/PycharmProjects/HotelScraping/HotelScraping/csv/csv_par_site","C:/Users/ACER/PycharmProjects/HotelScraping/HotelScraping/csv/test_carte.csv")
+
+#concat("C:/Users/ACER/PycharmProjects/HotelScraping/HotelScraping/csv/csv_par_site","C:/Users/ACER/PycharmProjects/HotelScraping/HotelScraping/csv/test_carte.csv")
 
 #df = pd.read_csv("C:/Users/ACER/PycharmProjects/HotelScraping/HotelScraping/csv/csv_par_site/trivago_general.csv", sep=";")
 #df.drop(df.loc[df['name']=='name'].index, inplace=True)
