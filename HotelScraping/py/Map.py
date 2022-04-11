@@ -13,9 +13,10 @@ carte = folium.Map([48.850928, 2.346260], zoom_start=20)
 
 # suppression des lignes jumelles pout le même hotel
 df_carte = df[['gps','name','address','prices']]
-df_carte = df_carte.sort_values(by=["name"], key=lambda col: col.str.upper())
-info_carte = df_carte.drop_duplicates(subset=['name'], ignore_index = True)
-coordo_carte = info_carte.dropna(how = 'any')
+info_carte = df_carte.dropna(how = 'any')
+info_carte = info_carte.sort_values(by=["name"], key=lambda col: col.str.upper())
+coordo_carte = info_carte.drop_duplicates(subset=['name'], ignore_index = True)
+
 
 
 # récupération des données
