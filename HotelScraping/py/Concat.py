@@ -28,8 +28,22 @@ def concat(path, name):
 #df.to_csv("C:/Users/ACER/PycharmProjects/HotelScraping/HotelScraping/csv/csv_par_site/trivago_general.csv",index=False, sep=";")
 
 
-
-path = "C:/Users/ACER/PycharmProjects/HotelScraping/HotelScraping/csv"
+""" 
+path = "C:/Users/ACER/PycharmProjects/InterfaceHotel"
 df = pd.read_csv(path+"/test_carte.csv", sep=";")
 df['stars'].fillna("0",inplace=True)
 df.to_csv(path+"/test_carte.csv", index=False,sep=";")
+"""
+path = "C:/Users/ACER/PycharmProjects/InterfaceHotel"
+df = pd.read_csv(path+"/test_carte.csv", sep=";")
+
+new_list=[]
+for i in range(len(df['prices'])):
+   price_space=df['prices'].iloc[i].replace("\u202f","")
+   prix_space = price_space.split(" ")
+   prix_space = "".join(prix_space)
+   prix=prix_space.replace(',', '.')
+   new_list.append(float(prix))
+df['prices'] = df['prices'].replace(df['prices'].values, new_list)
+df.to_csv(path+"/test_carte.csv",index=False, sep=";")
+
