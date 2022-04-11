@@ -5,7 +5,7 @@ import numpy as np
 import folium
 
 # export du csv général
-df = pd.read_csv("C:/Users/ACER/PycharmProjects/HotelScraping/HotelScraping/csv/test_carte.csv", sep = ";")
+df = pd.read_csv("C:/Users/ACER/PycharmProjects/InterfaceHotel/test_carte.csv", sep = ";")
 
 
 # création de la carte
@@ -36,5 +36,5 @@ for i in range(len(coordo_carte)):
     longitude = ''.join(x for x in loc[1] if x not in characters)
     folium.Marker([latitude, longitude], popup = popup).add_to(carte)
 
-carte.save('Carte_hotel.html')
-webbrowser.open("Carte_hotel.html")
+carte.save('C:/Users/ACER/PycharmProjects/InterfaceHotel/Carte_hotel.html')
+webbrowser.open("C:/Users/ACER/PycharmProjects/InterfaceHotel/Carte_hotel.html")
