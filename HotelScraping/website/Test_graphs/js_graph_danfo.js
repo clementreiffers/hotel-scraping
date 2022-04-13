@@ -4,7 +4,7 @@ dfd.readCSV("https://raw.githubusercontent.com/clementreiffers/HotelScraping/mai
         df.head().print()
 
         let layout = {
-            title: "Hotels' mean price per months",
+            title: "Hotels' mean price per month",
             xaxis: {
                 title: "Date",
             },
