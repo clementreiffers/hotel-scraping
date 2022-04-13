@@ -43,6 +43,9 @@ class ScrapingTrivago:
         self.__select_date(self.__end_date)
         self.__select_guests()
         self.__validate_research()
+        time.sleep(40)
+        self.__driver.find_element(by="xpath", value="//body").send_keys(Keys.CONTROL + 'r')
+        time.sleep(10)
         self.__click_maps_and_filter_buttons()
 
     def copy_hotels(self):
