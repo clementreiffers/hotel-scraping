@@ -86,7 +86,7 @@ Quentin Morel :
 - @Im-Rises
 - <https://github.com/Im-Rises>
 
-Adrien TIRLEMONT :
+Adrien Tirlemont :
 
 - @Meatisdelicious
 - <https://github.com/Meatisdelicious>
