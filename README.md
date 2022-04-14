@@ -35,3 +35,11 @@ Giving you informations about the most expensive month for sleeping at the hotel
 ### GUI Images
 
 put images here.
+
+## Other sources
+
+The source code of the website can be found here :
+<https://github.com/maaelle/InterfaceHotel>
+
+Flutter GUI prototype projetc :
+<https://github.com/clementreiffers/hotel-scraper-interface>
