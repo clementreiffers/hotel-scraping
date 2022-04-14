@@ -302,7 +302,7 @@ if __name__ == '__main__':
                    start_date="05-20-2022",
                    end_date="05-23-2022",
                    nbr_adults=2,
-                   nbr_children=2,
+                   nbr_children=2, 
                    nbr_room=2,
                    ages_of_children=[5, 9],
                    filename="bookingCom.csv")

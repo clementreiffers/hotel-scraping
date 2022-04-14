@@ -1,6 +1,11 @@
 # HotelScraping
 
+<center>
+
 ![python logo](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)  
+
+![selenium logo](https://clipground.com/images/selenium-logo-7.png)
+</center>
 
 ## Description
 
@@ -29,8 +34,17 @@ There is specific section on the gui app that allow you to study the price of th
 
 ## GUI application
 
-We implemented a GUI application made in dash and hosted on pythonanywhere.  
+We implemented a GUI application made in dash and hosted on pythonanywhere : http://maaelle.pythonanywhere.com/ 
+
 The website is in French. No english translation has been made.
+
+## how to access to the code of the GUI
+
+The code of the GUI available in this repository at https://github.com/clementreiffers/HotelScraping/tree/main/HotelScraping/website isn't our final GUI, it was only a test before coding it using Dash Python. 
+
+So if you want to check the code of the GUI, you need to go there : 
+
+https://github.com/maaelle/InterfaceHotel
 
 ### GUI description
 
@@ -57,17 +71,17 @@ Flutter GUI prototype projetc :
 
 ## Contributors
 
-Maëlle MARCELIN :  
+Maëlle Marcelin :  
 
 - @maaelle
 - <https://github.com/maaelle>
 
-Clément REIFFERS :
+Clément Reiffers :
 
 - @clementreiffers
 - <https://github.com/clementreiffers>
 
-Quentin MOREL :
+Quentin Morel :
 
 - @Im-Rises
 - <https://github.com/Im-Rises>
@@ -87,3 +101,7 @@ Pythonanywhere :
 
 Dash :  
 <https://plotly.com/dash/>
+
+<center>
+<img src="http://ForTheBadge.com/images/badges/built-with-love.svg">
+</center>
