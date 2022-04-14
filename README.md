@@ -38,7 +38,7 @@ We implemented a GUI application made in dash and hosted on pythonanywhere : htt
 
 The website is in French. No english translation has been made.
 
-## how to access to the code of the GUI
+### GUI source code
 
 The code of the GUI available in this repository at https://github.com/clementreiffers/HotelScraping/tree/main/HotelScraping/website isn't our final GUI, it was only a test before coding it using Dash Python. 
 
@@ -86,7 +86,7 @@ Quentin Morel :
 - @Im-Rises
 - <https://github.com/Im-Rises>
 
-Adrien Tirlemont :
+Adrien TIRLEMONT :
 
 - @Meatisdelicious
 - <https://github.com/Meatisdelicious>
