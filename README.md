@@ -1,10 +1,10 @@
 # HotelScraping
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="pythonLogo" style="width:200px;"/>
-  <img src="https://clipground.com/images/selenium-logo-7.png" alt="seleniumLogo" style="width:200px;"/>
-  <img src="https://user-images.githubusercontent.com/59691442/163533178-17e9e8bf-d844-41d5-a1f2-4ca06316793e.svg" alt="pythonanywhereLogo" style="width:200px;"/>  
-  <img src="https://user-images.githubusercontent.com/59691442/163533189-eca49767-276c-45d7-910b-e955b7e2856e.svg" alt="plotlyDashLogo" style="width:200px;"/>
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="pythonLogo" style="height:50px;"/>
+  <img src="https://clipground.com/images/selenium-logo-7.png" alt="seleniumLogo" style="height:50px;"/>
+  <img src="https://user-images.githubusercontent.com/59691442/163533178-17e9e8bf-d844-41d5-a1f2-4ca06316793e.svg" alt="pythonanywhereLogo" style="height:50px;"/>  
+  <img src="https://user-images.githubusercontent.com/59691442/163533189-eca49767-276c-45d7-910b-e955b7e2856e.svg" alt="plotlyDashLogo" style="height:50px;"/>
 </p>  
 
 
