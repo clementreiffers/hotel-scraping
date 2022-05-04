@@ -3,8 +3,8 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="pythonLogo" style="width:200px;"/>
   <img src="https://clipground.com/images/selenium-logo-7.png" alt="seleniumLogo" style="width:200px;"/>
-  <img src="https://user-images.githubusercontent.com/59691442/163533178-17e9e8bf-d844-41d5-a1f2-4ca06316793e.svg" alt="pythonanywhereLogo" style="width:200px;"/>  
   <img src="https://user-images.githubusercontent.com/59691442/163533189-eca49767-276c-45d7-910b-e955b7e2856e.svg" alt="plotlyDashLogo" style="width:200px;"/>
+  <img src="https://user-images.githubusercontent.com/59691442/163533178-17e9e8bf-d844-41d5-a1f2-4ca06316793e.svg" alt="pythonanywhereLogo" style="width:200px;"/>  
 </p>  
 
 
@@ -25,12 +25,12 @@ The python scripts create bots that navigates through the different hotels websi
 Those data can be used by the GUI app website to search for the hotel that best suit you or for analysis.
 There is specific section on the gui app that allow you to study the price of the hotel and locate them on a map.
 
-## Website scraped
+## Scraped websites
 
-- <hotels.com>
-- <booking.com>
-- <trivago.com>
-- <kayak.fr>
+- hotels.com
+- booking.com
+- trivago.fr
+- kayak.fr
 
 ## Hotels' data gathered
 
